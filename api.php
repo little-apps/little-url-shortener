@@ -21,6 +21,9 @@ define('LUS_LOADED', true);
 
 require_once('inc/config.php');
 
+// Uncomment this to enable debugging (not recommended)
+error_reporting(0);
+
 // Connect to MySQL
 $mysqli = new mysqli(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
 

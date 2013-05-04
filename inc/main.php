@@ -19,6 +19,9 @@
 
 if (!defined('LUS_LOADED')) die('This file cannot be loaded directly');
 
+// Uncomment this to enable debugging (not recommended)
+error_reporting(0);
+
 require_once(dirname(__FILE__).'/config.php');
 require_once(dirname(__FILE__).'/functions.php');
 
