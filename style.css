@@ -1,0 +1,1298 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+	background-color: #232323;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+.clear { clear: both; }
+
+/* Top menu */
+#topmenu { 
+	height: 61px; 
+	width: 100%; 
+	background-color: #1f7f5c; 
+}
+
+#topmenu > #nav {
+	width: 959px;
+	margin: 0 auto;
+}
+
+#topmenu > #nav > #box { 
+	cursor: pointer;
+	float: left; 
+	background: url("images/menu/box.png") no-repeat scroll center transparent;
+	width: 62px; 
+	height: 61px;
+	border-left: solid 1px rgba(255,255,255,.05); 
+	border-right: solid 1px rgba(255,255,255,.05); 
+}
+
+#topmenu > #nav > .selected {
+	background: url("images/menu/box.png") no-repeat scroll center #232323 !important;
+}
+
+#topmenu > #nav > #box > ul {
+	display: none;
+	position: relative;
+	top: 61px;
+	left: -1px;
+	background-color: #232323; 
+	width: 247px;
+}
+
+#topmenu > #nav > #box > ul > li {
+	height: 61px;
+	line-height: 61px;
+	text-align: center;
+	border: solid 1px rgba(255,255,255,.05); 
+}
+
+#topmenu > #nav > #box > ul > li:hover {
+	background-color: #1f7f5c; 
+}
+
+#topmenu > #nav > #box > ul > li > a {
+	font: 700 18px 'Montserrat', sans-serif;
+	color: rgba(255,255,255,.20);
+	text-decoration: none;
+	text-transform:uppercase;
+	display: block; 
+	width: 247px; 
+	height: 61px; 
+	line-height: 61px;
+}
+
+#topmenu > #nav > #box > ul > li > a:hover {
+	color: #fff;
+}
+
+#topmenu > #nav > #login {
+	float: right; 
+	vertical-align: middle; 
+	
+}
+#topmenu  > #nav > #login > #register, #topmenu > #nav > #login > #signin, #topmenu > #nav > #login > #logout {
+	float: left; 
+	text-align: center; 
+	font: 700 18px 'Montserrat', sans-serif;
+	vertical-align: middle;
+	line-height: 61px;
+	text-transform:uppercase; 
+	border-left: solid 1px rgba(255,255,255,.05); 
+	border-right: solid 1px rgba(255,255,255,.05);
+}
+
+#topmenu  > #nav > #login > .selected {
+	background-color: #232323;
+}
+
+#topmenu > #nav > #login  a {
+	color: #fff; 
+	text-decoration: none;
+}
+
+#topmenu > #nav > #login > #register { width: 140px; }
+#topmenu > #nav > #login > #signin { width: 125px; }
+#topmenu > #nav > #login > #logout { width: 114px; }
+
+/* Register Box */
+#registerbox {
+	width: 100%;
+	height: 257px;
+	background-color: #232323;
+	position: absolute;
+	padding-top: 75px;
+	z-index: 9999;
+	display: none;
+}
+
+#registerbox > form {
+	width: 1000px; 
+	margin: 0 auto;
+}
+
+#registerbox ul {
+	float: left;
+}
+
+#registerbox ul li { 
+	clear: both; 
+	height: 77px;
+	vertical-align: middle;
+}
+#registerbox ul li.name input { 
+	width: 384px;
+	height: 61px;
+	margin-left: 19px;
+	color: rgb(255,255,255);
+	border: solid 1px rgba(255,255,255,.05);
+	font: 20px 'Montserrat', sans-serif;
+	background: url("images/menu/register/input-off.png") no-repeat scroll right center #232323;
+	padding-left: 25px;
+	padding-right: 61px;
+}
+
+#registerbox ul li.name input:hover, #registerbox ul li.name input:focus {
+	background: url("images/menu/register/input-on.png") no-repeat scroll right center rgb(31,127,92);
+	color: #fff;
+}
+
+#registerbox ul li.email input, #registerbox ul li.password input  { 
+	background-color: #232323;
+	width: 384px;
+	height: 61px;
+	margin-left: 19px;
+	color: rgb(255,255,255);
+	border: solid 1px rgba(255,255,255,.05);
+	font: 20px 'Montserrat', sans-serif;
+	padding-left: 25px;
+}
+
+#registerbox ul li.email input { padding-right: 84px; }
+#registerbox ul li.password input { padding-right: 107px; }
+
+#registerbox ul li.email input:hover, #registerbox ul li.email input:focus,
+#registerbox ul li.password input:hover, #registerbox ul li.password input:focus {
+	background-color: rgb(31,127,92);
+	color: #fff;
+}
+
+#registerbox ul li.email input + label {
+	margin-left: -74px;
+}
+
+#registerbox ul li.password input + label { 
+	margin-left: -101px;
+}
+
+#registerbox ul li.email input:hover + label, #registerbox ul li.email input:focus  + label,
+#registerbox ul li.password input:hover + label, #registerbox ul li.password input:focus  + label {
+	color:#fff;
+}
+
+#registerbox ul li.submit input {
+	float: right;
+	margin-right: 26px;
+	padding: 0; 
+	background: no-repeat url(images/menu/register/submit.png);
+	width: 145px;
+	height: 51px; 
+	border: medium none;
+	font-size: 0;
+	vertical-align: middle;
+}
+
+#registerbox ul li.submit input:hover { cursor: pointer; }
+
+#registerbox ul li label {
+	display: inline-block;
+	width: 100px;
+	color: rgba(255,255,255,.20);
+	font: 18px 'Montserrat', sans-serif;
+	line-height: 61px;
+}
+
+#registerbox ul li.birthdate > label, #registerbox ul li.birthdate > div {
+	float: left;
+}
+
+#registerbox ul li.birthdate input#day { 
+	height: 61px; 
+	width: 66px; 
+	margin-left: 15px; 
+	text-align: center;
+	border: solid 1px rgba(255,255,255,.05);
+	background-color: #232323;
+	color: rgb(255,255,255);
+	font: 18px 'Montserrat', sans-serif;
+}
+
+#registerbox ul li.birthdate input#day:hover, #registerbox ul li.birthdate input#day:focus {
+	background-color: rgb(31,127,92);
+	cursor: pointer;
+}
+
+#registerbox ul li.birthdate input#month { 
+	height: 61px; 
+	width: 196px; 
+	margin-left: 18px; 
+	padding: 0px 61px 0px 24px;
+	border: solid 1px rgba(255,255,255,.05);
+	background: url("images/menu/register/combo-off.png") no-repeat scroll right center #232323;
+	color: rgb(255,255,255);
+	font: 18px 'Montserrat', sans-serif;
+}
+
+#registerbox ul li.birthdate input#month:hover, #registerbox ul li.birthdate input#month:focus {
+	background: url("images/menu/register/combo-on.png") no-repeat scroll right center rgb(31,127,92);
+	cursor: pointer;
+}
+
+#registerbox ul li.birthdate input#year { 
+	height: 61px; 
+	width: 79px; 
+	margin-left: 18px; 
+	text-align: center;
+	border: solid 1px rgba(255,255,255,.05);
+	background-color: #232323;
+	color: rgb(255,255,255);
+	font: 18px 'Montserrat', sans-serif;
+}
+
+#registerbox ul li.birthdate input#year:hover, #registerbox ul li.birthdate input#year:focus {
+	background-color: rgb(31,127,92);
+	cursor: pointer;
+}
+
+/* Birth data combo boxes */
+#registerbox ul li.birthdate .combo-day { 
+	display: none;
+	position: relative; 
+	width: 66px; 
+	left: 15px;
+	z-index: 10;
+}
+
+#registerbox ul li.birthdate .combo-month { 
+	display: none;
+	position: relative; 
+	width: 194px; 
+	left: 18px;
+	z-index: 10;
+}
+
+#registerbox ul li.birthdate .combo-year { 
+	display: none;
+	position: relative;
+	width: 79px; 
+	left: 18px;
+	z-index: 10;
+}
+
+#registerbox ul li.birthdate .combo-day ul, #registerbox ul li.birthdate .combo-month ul, #registerbox ul li.birthdate .combo-year ul {
+	height: 244px; 
+	overflow-y: scroll;
+	background-color: #fff; 
+}
+#registerbox ul li.birthdate .combo-day ul li { width: 49px; }
+#registerbox ul li.birthdate .combo-month ul li { width: 177px; }
+#registerbox ul li.birthdate .combo-year ul li { width: 62px; }
+
+#registerbox ul li.birthdate .combo-day ul li, #registerbox ul li.birthdate .combo-month ul li, #registerbox ul li.birthdate .combo-year ul li {
+	color: #444444;
+	font: 18px 'Montserrat', sans-serif;
+	text-align: center;
+	height: 61px;
+	line-height: 61px;
+}
+
+#registerbox ul li.birthdate .combo-day ul li.selected, #registerbox ul li.birthdate .combo-day ul li:hover,
+#registerbox ul li.birthdate .combo-month ul li.selected, #registerbox ul li.birthdate .combo-month ul li:hover,
+#registerbox ul li.birthdate .combo-year ul li.selected, #registerbox ul li.birthdate .combo-year ul li:hover {
+	color: #fff;
+	background-color: rgb(31,127,92);
+	cursor: pointer;
+}
+
+/* Sign in Box */
+#signinbox { 
+	display: none;
+	background-color: #232323;
+    height: 258px;
+    position: fixed;
+    right: 66px;
+    width: 415px;
+    z-index: 9999;
+}
+
+#signinbox ul {
+	padding-top: 20px; 
+	padding-left: 28px; 
+	padding-right: 28px;
+}
+
+#signinbox ul input#username {
+	height: 60px; 
+	width: 100%; 
+	background: #232323 left no-repeat url(images/menu/signin/user-off.png);
+	padding-left: 85px;
+	color: rgba(255,255,255,.20);
+	border: solid 1px rgba(255,255,255,.05);
+	font: 20px 'Montserrat', sans-serif;
+}
+#signinbox ul input#username:hover, #signinbox ul input#username:focus {
+	background: #232323 left no-repeat url(images/menu/signin/user-on.png);
+	color: rgb(31,127,92);
+}
+
+#signinbox ul input#password {
+	height: 60px; 
+	width: 100%; 
+	background: #232323 left no-repeat url(images/menu/signin/password-off.png);
+	padding-left: 85px;
+	color: rgba(255,255,255,.20);
+	border: solid 1px rgba(255,255,255,.05);
+	font: 20px 'Montserrat', sans-serif;
+}
+#signinbox ul input#password:hover, #signinbox ul input#password:focus  {
+	background: #232323 left no-repeat url(images/menu/signin/password-on.png);
+	color: rgb(31,127,92);
+}
+
+#signinbox ul input#password + span {
+	float: right; 
+	margin-top: 14px;
+}
+
+#signinbox ul input#password + span > a {
+	font: 13px 'Montserrat', sans-serif; 
+	color: rgba(255,255,255,.20);
+	text-decoration: none;
+}
+
+#signinbox ul input#password + span > a:hover { color: #fff; }
+
+#signinbox ul li#bottom { 
+	clear: both;
+	height: 80px; 
+	vertical-align: middle; 
+	line-height: 80px; 
+}
+
+#signinbox ul li#bottom #remember { display: none; }
+
+#signinbox ul li#bottom #remember + label:before {
+    background-color: #5a9aa8;
+	vertical-align: top;
+    content: " ";
+    display: inline-block;
+    height: 22px;
+    padding: 0;
+    position: relative;
+    width: 22px;
+	margin-right: 19px;
+	cursor: pointer;
+}
+
+#signinbox ul li#bottom #remember:checked + label:before {
+	background: #5a9aa8 center no-repeat url(images/menu/signin/check.png);
+}
+
+#signinbox ul li#bottom #remember + label {
+	font: 18px 'Montserrat', sans-serif;
+	color: #fff;
+	cursor: pointer;
+}
+
+#signinbox ul li#bottom #submit {
+	margin-left: 121px;
+	padding: 0; 
+	background: no-repeat url(images/menu/signin/submit.png);
+	width: 51px;
+	height: 51px; 
+	border: medium none;
+	font-size: 0;
+	vertical-align: middle;
+} 
+
+#signinbox ul li#bottom #submit:hover { cursor: pointer; }
+
+/* Sign in page */
+#bottom > #signin { 
+	background-color: #232323;
+    height: 267px;
+    width: 528px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#bottom > #forgotpw {
+	background-color: #232323;
+    height: 166px;
+    width: 528px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#bottom > #resetpw {
+	background-color: #232323;
+    height: 238px;
+    width: 528px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#bottom > p#signin-title, #bottom > p#forgotpw-title, #bottom > p#resetpw-title { 
+	text-align: center; 
+	font: 18px 'Montserrat', sans-serif;
+	margin: 15px 0px 15px;
+}
+
+#bottom > #signin ul, #bottom > #forgotpw ul, #bottom > #resetpw ul {
+	padding: 20px 28px 0px;
+}
+
+#bottom > #signin ul input#username, #bottom > #forgotpw ul input#username {
+	height: 60px; 
+	width: 100%; 
+	background: #232323 left no-repeat url(images/menu/signin/user-off.png);
+	padding-left: 85px;
+	color: rgba(255,255,255,.20);
+	border: solid 1px rgba(255,255,255,.05);
+	font: 20px 'Montserrat', sans-serif;
+}
+#bottom > #signin ul input#username:hover, #bottom > #signin ul input#username:focus,
+#bottom > #forgotpw ul input#username:hover, #bottom > #forgotpw ul input#username:focus {
+	background: #232323 left no-repeat url(images/menu/signin/user-on.png);
+	color: rgb(31,127,92);
+}
+
+#bottom > #signin ul input#password, 
+#bottom > #resetpw ul input#password, #bottom > #resetpw ul input#password-confirm {
+	height: 60px; 
+	width: 100%; 
+	background: #232323 left no-repeat url(images/menu/signin/password-off.png);
+	padding-left: 85px;
+	color: rgba(255,255,255,.20);
+	border: solid 1px rgba(255,255,255,.05);
+	font: 20px 'Montserrat', sans-serif;
+}
+#bottom > #signin ul input#password:hover, #bottom > #signin ul input#password:focus,
+#bottom > #resetpw ul input#password:hover, #bottom > #resetpw ul input#password:focus,
+#bottom > #resetpw ul input#password-confirm:hover, #bottom > #resetpw ul input#password-confirm:focus {
+	background: #232323 left no-repeat url(images/menu/signin/password-on.png);
+	color: rgb(31,127,92);
+}
+
+#bottom > #signin ul input#password + span {
+	float: right; 
+	margin-top: 14px;
+}
+
+#bottom > #signin ul input#password + span > a {
+	font: 13px 'Montserrat', sans-serif; 
+	color: rgba(255,255,255,.20);
+	text-decoration: none;
+}
+
+#bottom > #signin ul input#password + span > a:hover { color: #fff; }
+
+#bottom > #signin ul li#bottom, #bottom > #forgotpw ul li#bottom, #bottom > #resetpw ul li#bottom { 
+	clear: both;
+	height: 80px; 
+	vertical-align: middle; 
+	line-height: 80px; 
+	background-color: #232323;
+}
+
+#bottom > #signin ul li#bottom #remember-page { display: none; }
+
+#bottom > #signin ul li#bottom #remember-page + label:before {
+    background-color: #5a9aa8;
+	vertical-align: top;
+    content: " ";
+    display: inline-block;
+    height: 22px;
+    padding: 0;
+    position: relative;
+    width: 22px;
+	margin-right: 19px;
+	cursor: pointer;
+}
+
+#bottom > #signin ul li#bottom #remember-page:checked + label:before {
+	background: #5a9aa8 center no-repeat url(images/menu/signin/check.png);
+}
+
+#bottom > #signin ul li#bottom #remember-page + label {
+	font: 18px 'Montserrat', sans-serif;
+	color: #fff;
+	cursor: pointer;
+}
+
+#bottom > #signin ul li#bottom #submit, #bottom > #forgotpw ul li#bottom #submit, #bottom > #resetpw ul li#bottom #submit {
+	padding: 0; 
+	background: no-repeat url(images/menu/signin/submit.png);
+	width: 51px;
+	height: 51px; 
+	border: medium none;
+	font-size: 0;
+	vertical-align: middle;
+	float: right; 
+	margin-top: 18px;
+}
+
+#bottom > #signin ul li#bottom #submit:hover, #bottom > #forgotpw ul li#bottom #submit:hover, #bottom > #resetpw ul li#bottom #submit:hover { cursor: pointer; }
+
+/* Main content */
+#wrapper { 
+	background-color: #fff;
+}
+
+#wrapper #top {
+	background-color: #ece9e2;
+	padding: 28px 0px 28px 0px;
+}
+#wrapper #top .form {
+	width: 959px;
+	margin: 0px auto 0px auto;
+}
+
+#wrapper #top .form input#url {
+	height: 61px; 
+	width: 836px; 
+	background-color: #fff;
+	padding-left: 23px;
+	color: #232323;
+	border: solid 1px rgba(255,255,255,.05);
+	font: 20px 'Montserrat', sans-serif;
+}
+#wrapper #top .form input#url:hover {
+	border: solid 3px #ddd8ce;
+}
+#wrapper #top .form input#url:focus {
+	color: rgb(31,127,92);
+	border: solid 3px rgb(31,127,92);
+	background-color: #ebe7df;
+}
+
+#wrapper #top .form input#submit {
+	height: 61px;
+	border: medium none;
+	background-color: rgb(31,127,92);
+	color: #f6f6f6;
+	font: 16px 'Montserrat', sans-serif;
+	text-align: center;
+	float: right;
+}
+
+#wrapper #top .form input#submit:hover { 
+	cursor: pointer;	
+}
+
+#wrapper #bottom { 
+	background-color: #fff;
+	
+}
+#wrapper #bottom .info {
+	font: 700 20px 'Montserrat', sans-serif;
+	width: 959px; 
+	text-align: center;
+	margin: 30px auto 0px auto;
+}
+
+#wrapper #bottom .info .title { padding-top: 15px; }
+#wrapper #bottom .info .answer { margin-top: 15px; }
+
+#wrapper > #bottom > .stats {
+	margin-top: 25px
+}
+
+#wrapper > #bottom  > .stats > .title { 
+	text-align: center;
+	font: 700 20px 'Montserrat', sans-serif;
+	padding-top: 15px;
+}
+
+#wrapper > #bottom > .stats > .boxes {
+	margin: 15px auto 0; 
+	width: 959px; 
+	text-align: center
+}
+#wrapper > #bottom > .stats > .boxes > .box {
+	float: left;
+	width: 30%;
+	height: 110px;
+	margin-left: 25px;
+	font-family: 'Montserrat', sans-serif;
+	font-weight: 700;
+	background-color: #232323;
+	border: solid 1px rgba(255,255,255,.05);
+	color: #fff;
+}
+
+#wrapper > #bottom > .stats > .boxes > .box > .top {
+	font-size: 14px;
+    margin-top: 13px;
+}
+
+#wrapper > #bottom > .stats > .boxes > .box > .number {
+	display: block;
+    font-size: 34px;
+    margin-top: 15px;
+    vertical-align: middle;
+}
+
+#wrapper > #bottom > .features {
+	height: 290px;
+	margin: 20px auto 0;
+	width: 959px; 
+	text-align: center;
+}
+
+#wrapper > #bottom > .features > p {
+	font: 700 20px 'Montserrat', sans-serif;
+	text-align: center;
+}
+
+#wrapper > #bottom > .features > #feature {
+	width: 30%;
+	height: 200px;
+	margin-top: 15px;
+	margin-left: 25px;
+	background-color: #EBE7DF;
+    border: 3px solid #1F7F5C;
+    color: #000;
+	float: left;
+}
+
+#wrapper > #bottom > .features > #feature > ul > li > img { margin: 10px 0 15px 0; }
+
+#wrapper > #bottom > .features > #feature > ul > li {
+	font: 18px 'Montserrat', sans-serif;
+}
+
+#footer {
+	height: 142px;
+	clear: both;
+	position: relative;
+    top: 35px;
+	margin: 0px auto 0px;
+    width: 959px;
+	font: 14px 'Montserrat', sans-serif;
+	color: #fff;
+}
+
+#footer a {
+	color: #fff;
+	text-decoration: underline;
+}
+#footer #copyright {
+	float: left;
+}
+
+#footer #navigation {
+	float: right;
+}
+
+/* Account URLs */
+#bottom #urls { 
+	width: 959px;
+	margin: 0px auto;
+	padding-bottom: 115px;
+}
+
+#bottom #urls p { 
+	text-align: center;
+	font: 700 20px 'Montserrat', sans-serif;
+	margin-top: 15px;
+}
+
+/* Data Table */ 
+#datatable_wrapper {
+	margin-top: 15px;
+}
+#datatable_wrapper > #datatable_filter {
+	float: right;
+}
+#datatable_wrapper > #datatable_filter > label { 
+	font-size: 0;
+}
+
+#datatable_wrapper > #datatable_filter > label > input {
+	height: 61px;
+	width: 417px;
+	line-height: 61px;
+	font: 20px 'Montserrat', sans-serif;
+	background: url("images/search-off.png") no-repeat scroll right center #232323;
+	color: rgba(255,255,255,.20);
+	border: medium none;
+	padding: 0px 63px 0px 15px;
+}
+
+#datatable_wrapper > #datatable_filter > label > input:hover, #datatable_wrapper > #datatable_filter > label > input:focus {
+	background: url("images/search-on.png") no-repeat scroll right center rgb(31,127,92);
+	color: rgb(255,255,255);
+}
+
+#datatable_wrapper > #datatable_paginate {
+	top: 51px; 
+	position: relative;
+}
+
+#datatable_wrapper > #datatable_paginate a {
+	float: left;
+	display: block;
+	cursor: pointer;
+	height: 61px;
+	width: 61px;
+	background-color: #232323;
+	border-right: solid 1px rgba(255,255,255,.05);
+	color: #fff;
+	font: 20px/61px 'Montserrat', sans-serif;
+	text-align: center;
+}
+
+#datatable_wrapper > #datatable_paginate a:hover {
+	background-color: rgb(31,127,92);
+}
+
+#bottom #urls table {
+	width: 100%;
+	text-align: center;
+	background-color: #232323;
+	border: solid 1px rgba(255,255,255,.05);
+	font-family: 'Montserrat', sans-serif;
+	color: #fff;
+	margin-top: 15px;
+	clear: both; 
+	position: relative; 
+	top: 15px;
+}
+
+#bottom #urls table tr {
+	height: 61px;
+	line-height: 61px;
+	vertical-align: middle;
+}
+#bottom #urls table thead tr th, #bottom #urls table tbody tr td {
+	border: solid 1px rgba(255,255,255,.05);
+}
+#bottom #urls table thead tr th:first-child, #bottom #urls table tbody tr td:first-child {
+	width: 61px;
+}
+#bottom #urls table tbody tr td:first-child {
+	cursor: pointer;
+}
+
+#bottom #urls table tbody tr td#off {
+	background: url(images/check-off.png) no-repeat center;
+}
+
+#bottom #urls table tbody tr td#on {
+	background: rgb(31,127,92) url(images/check-on.png) no-repeat center;
+}
+
+#bottom #urls table thead tr th:last-child, #bottom #urls table tbody tr td:last-child {
+	width: 130px;
+}
+
+#bottom #urls table thead tr th {
+	font-size: 18px;
+}
+
+#bottom #urls table tbody tr td {
+	font-size: 15px;
+}
+
+#bottom #urls #delete {
+	float: right; 
+	height: 61px; 
+	width: 165px; 
+	background-color: rgb(35, 35, 35); 
+	text-align: center; 
+	margin: 51px 0 0;
+	color: #fff;
+	text-decoration: none;
+	font: 15px 'Montserrat', sans-serif;
+	vertical-align: middle;
+	border: medium none;
+	cursor: pointer;
+}
+
+#bottom #urls #delete:hover {
+	background-color: rgb(31,127,92);
+	
+}
+
+/* Account info */
+#bottom #account {
+	width: 959px;
+	margin: 0px auto;
+	height: 600px;
+}
+
+#bottom #account p {
+	text-align: center;
+	font: 700 20px 'Montserrat', sans-serif;
+	margin: 15px 0px;
+}
+
+#bottom #account form {
+	background-color: rgb(35, 35, 35); 
+	width: 100%;
+	height: 319px;
+	color: #fff;
+}
+
+#bottom #account form > span {
+	display: block;
+	padding: 15px 0px 7px 23px;
+	font: 15px 'Montserrat', sans-serif;
+	color: rgba(255, 255, 255, 0.2);
+}
+
+#bottom #account form ul#left { width: 49%; float: left; }
+#bottom #account form ul#right { width: 49%; float: right; }
+
+#bottom #account form ul li {
+	height: 61px;
+	line-height: 61px;
+	vertical-align: middle;
+	text-align: left;
+	padding-top: 17px;
+}
+#bottom #account form ul li label {
+	color: rgba(255, 255, 255, 0.2);
+	display: block;
+    float: left;
+    width: 157px;
+	font: 18px 'Montserrat', sans-serif;
+	line-height: 61px;
+	text-align: right;
+}
+
+#bottom #account form ul li label + input {
+	background: url("images/menu/register/input-off.png") no-repeat scroll right center #232323;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: #FFFFFF;
+    font: 20px 'Montserrat',sans-serif;
+    height: 61px;
+    margin-left: 19px;
+    padding-left: 25px;
+    padding-right: 61px;
+    width: 287px;
+}
+
+#bottom #account form ul li label + input:hover, #bottom #account form ul li label + input:focus {
+	background: url("images/menu/register/input-on.png") no-repeat scroll right center rgb(31,127,92);
+	color: #fff;
+}
+
+#bottom #account form ul#bot-right {
+    float: right;
+    padding: 10px 0px 18px;
+	margin-top: 65px;
+	background-color: #232323;
+}
+
+#bottom #account form ul#right li input, #bottom #account form ul#bot-right li input {
+	margin-right: 36px;
+    width: 256px;
+}
+
+#bottom #account form ul#bot-right li input[type="submit"] {
+	float: right; 
+	height: 61px; 
+	width: 165px; 
+	background-color: rgb(31,127,92);
+	text-align: center; 
+	margin: 15px 36px 0px;
+	color: #fff;
+	text-decoration: none;
+	font: 15px 'Montserrat', sans-serif;
+	vertical-align: middle;
+	border: medium none;
+	cursor: pointer;
+}
+
+/* API Key */
+#bottom > #api-key {
+	height: 211px;
+}
+
+#bottom > #api-key > p {
+	text-align: center;
+	font: 700 20px 'Montserrat', sans-serif;
+	margin: 15px 0px;
+}
+
+#bottom > #api-key > #box {
+	width: 959px;
+	background-color: #232323;
+	margin: 0 auto;
+	height: 137px;
+}
+
+#bottom > #api-key > #box > form > input#key {
+	background-color: #232323;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: #FFFFFF;
+    font: 20px 'Montserrat',sans-serif;
+    height: 61px;
+	margin: 15px 0px 0px 19px;
+	padding: 0px 18px 0px 15px;
+    width: 703px;
+	float: left;
+	text-align: center;
+}
+#bottom > #api-key > #box > form > input#regen {
+	height: 61px; 
+	width: 190px; 
+	background-color: rgb(31,127,92);
+	text-align: center; 
+	margin: 15px 16px 0px;
+	color: #fff;
+	text-decoration: none;
+	font: 15px 'Montserrat', sans-serif;
+	vertical-align: middle;
+	border: medium none;
+	cursor: pointer;
+	float: left;
+}
+#bottom > #api-key > #box > form > p {
+	font: 12px/36px 'Montserrat', sans-serif;
+	color: #fff;
+	text-align: center;
+	vertical-align: middle;
+}
+
+#bottom > #api-key > #box > form > p > a {
+	color: #fff;
+}
+
+/* API Docs */
+#bottom > p {
+	text-align: center;
+	font-family: 'Montserrat', sans-serif;
+}
+
+#bottom > p#title {
+	font-size: 18px;
+	font-weight: 700;
+	margin: 15px 0px;
+}
+
+#bottom > p#title + p {
+	margin-bottom: 18px;
+}
+
+#bottom > p#info {
+	font-size: 14px;
+}
+
+#bottom > #tabs > ul > li {
+	float: left;
+	background-color: #232323;
+	text-align: center;
+	width: 125px;
+	height: 42px;
+	vertical-align: middle;
+	margin-top: 5px;
+	line-height: 42px;
+}
+
+#bottom > #tabs > ul > li > a {
+	font: 15px 'Montserrat', sans-serif;
+	color: #fff;
+	text-decoration: none;
+}
+
+#bottom > #tabs > ul > li.ui-state-active {
+	background-color: rgb(40, 82, 88);
+	height: 47px;
+	line-height: 47px;
+	margin-top: 0px;
+}
+
+#bottom > #tabs > div {
+	background-color: rgb(40, 82, 88);
+	clear: both;
+	font: 15px 'Montserrat', sans-serif;
+	color: #fff;
+	padding: 5px 20px 30px;
+}
+
+#bottom > #tabs > div > table {
+	background-color: #232323;
+	color: #fff;
+	width: 368px;
+	margin: 15px auto 0;
+}
+
+#bottom > #tabs > div > p {
+	margin: 15px 0px;
+}
+
+#bottom > #tabs > div > table tr {
+	border: 1px solid rgba(255, 255, 255, 0.05);
+}
+#bottom > #tabs > div > table > thead th, #bottom > #tabs > div > table > tbody td {
+	padding: 15px;
+	text-align: center;
+}
+
+/* Contact form */
+#wrapper > #contact {
+	background-color: #ECE9E2;
+	padding: 15px 0px 8px;
+}
+
+#wrapper > #contact > p, #wrapper > #contact > form {
+	width: 959px;
+	margin: 0 auto;
+}
+
+#wrapper > #contact > p {
+	text-align: center;
+	font: 20px 'Montserrat', sans-serif;
+	padding-top: 20px;
+}
+
+#wrapper > #contact ul {
+	margin-top: 27px;
+}
+
+#wrapper > #contact ul > li {
+	height: 77px;
+	vertical-align: center;
+}
+
+#wrapper > #contact label {
+	font: 700 20px/61px 'Montserrat', sans-serif;
+	vertical-align: middle;
+	display: block;
+	width: 100px;
+	float: left;
+	margin: 0px 22px 0px 0px;
+	text-align: right;
+}
+
+#wrapper > #contact label + textarea {
+	height: 310px !important;
+	padding: 23px !important;
+	resize: none;
+}
+
+#wrapper > #contact label + input, #wrapper > #contact label + textarea {
+	float: left;
+	height: 61px; 
+	width: 836px; 
+	background-color: #fff;
+	padding: 0px 23px;
+	color: #232323;
+	border: solid 1px rgba(255,255,255,.05);
+	font: 20px 'Montserrat', sans-serif;
+}
+#wrapper > #contact label + input:hover, #wrapper > #contact label + textarea:hover {
+	border: solid 3px #ddd8ce;
+}
+#wrapper > #contact label + input:focus, #wrapper > #contact label + textarea:focus {
+	color: rgb(31,127,92);
+	border: solid 3px rgb(31,127,92);
+	background-color: #ebe7df;
+}
+
+#wrapper > #contact input[type="submit"] {
+	background-color: rgb(31,127,92);
+    border: medium none;
+    float: right;
+    height: 51px;
+	color: #fff;
+    font: 16px 'Montserrat', sans-serif;
+	margin-top: 20px;
+    padding: 0;
+    vertical-align: middle;
+    width: 145px;
+}
+
+/* Short URL popup */
+.popup {
+	z-index:40001;
+}
+
+.popup > .overlay {
+	top: 0px;
+	left: 0px;
+	position: fixed;
+    width:100%;
+    height:100%;
+    background-color: #000;
+    opacity:.5; /* Sets opacity so it's partly transparent */
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"; /* IE transparency */
+    filter:alpha(opacity=50); /* More IE transparency */
+    z-index:40001;
+}
+
+.popup > .inner {
+	position:fixed;
+    top:10%;
+    width:100%;
+    z-index:40002; /* ensures box appears above overlay */
+}
+.popup > .inner > .content {
+	width: 959px; 
+	height: 488px;
+	position: relative;
+	background-color: #ECE9E2; 
+	margin: 0px auto;
+	padding: 20px 0px 0px;
+}
+
+.popup > .inner > .content > #closeModal {
+	position:absolute;
+	top:-12px; /* Half the icon's height */
+	right:-12px; /* half the icon's width */
+	z-index:50;
+}
+.popup > .inner > .content > p {
+	text-align: center;
+	font: 700 20px 'Montserrat', sans-serif;
+	padding-bottom: 15px;
+}
+.popup > .inner > .content > a > #link {
+	cursor: pointer;
+	text-align: center;
+	height: 61px; 
+	width: 836px; 
+	background: url("images/clip-icon.png") no-repeat scroll right center #fff;
+	padding: 0px 23px;
+	color: #000;
+	border: solid 1px rgba(255,255,255,.05);
+	font: 20px 'Montserrat', sans-serif;
+	line-height: 61px;
+	vertical-align: middle;
+	display: block;
+	margin: 0 auto;
+}
+
+.popup > .inner > .content > a > #link:hover {
+	border: solid 3px #ddd8ce;
+}
+.popup > .inner > .content > a > #link:focus {
+	color: rgb(31,127,92);
+	border: solid 3px rgb(31,127,92);
+	background-color: #ebe7df;
+}
+
+.popup > .inner > .content > img#qrcode {
+	margin: 20px auto; 
+	display: block;
+}
+
+.popup > .inner > .content > #share {
+	margin: 0 auto;
+	width: 314px;
+}
+
+.popup > .inner > .content > #share > #facebook {
+	float: left;
+	background: url("images/share/fb-icon.png") no-repeat scroll left center #3b5999;
+	height: 61px;
+	font: 16px/61px 'Montserrat', sans-serif;
+	color:#fff;
+	padding-left: 77px;
+    text-align: left;
+    width: 149px;
+	border: medium none;
+	margin-right: 15px;
+	cursor: pointer;
+}
+
+
+.popup > .inner > .content > #share > #twitter {
+	float: left;
+	background: url("images/share/twitter-icon.png") no-repeat scroll left center #2589c5;
+	height: 61px;
+	font: 16px/61px 'Montserrat', sans-serif;
+	color:#fff;
+	padding-left: 77px;
+    text-align: left;
+    width: 149px;
+	border: medium none;
+	cursor: pointer;
+}
+
+/* Message Box */
+#message-wrapper { display: none; }
+#message-wrapper > #message {
+	position: fixed; 
+	top: 10%; 
+	left: 0;
+	text-align: center; 
+	width: 100%; 
+	z-index: 10;
+}
+
+#message-wrapper > #message > ul {
+	position: relative;
+	width: 959px;
+	margin: 0 auto; 
+	background: url("images/warning.png") no-repeat scroll 185px 13px #FBE3E4;
+}
+
+#message-wrapper > #message > ul > li#closeModal > a {
+	position:absolute;
+	top:-12px; /* Half the icon's height */
+	right:-12px; /* half the icon's width */
+	z-index:50;
+}
+
+#message-wrapper > #message > ul > li#title {
+	font: 700 18px/61px 'Montserrat',sans-serif;
+	clear: both;
+	position: relative;
+	color: #8A1F11;
+}
+
+#message-wrapper > #message > ul > li { 
+	font: 18px/61px 'Montserrat',sans-serif;
+	color: #232323;
+	clear: both;
+}
+
+/* Notification */
+#bottom > #notify, #contact > #notify {
+	width: 528px; 
+	margin: 15px auto 0; 
+	text-align: center; 
+	height: 61px;
+	font: 15px/61px 'Montserrat',sans-serif;
+	color: #fff;
+	background-color: rgb(31,127,92);
+}

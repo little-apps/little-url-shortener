@@ -1,0 +1,549 @@
+<?php
+
+	// Is there already a config.php file?
+	if (file_exists('inc/config.php')) {
+		define('LUS_LOADED', true);
+		require_once('inc/config.php');
+	}
+	
+	$default_values = array(
+		'site' => array(
+			'url' => ( defined('SITE_URL') ? SITE_URL : 'http://' . $_SERVER['SERVER_NAME'] ),
+			'ssl-url' => ( defined('SITE_SSLURL') ? SITE_SSLURL : 'https://' . $_SERVER['SERVER_NAME'] ),
+			'name' => ( defined('SITE_NAME') ? SITE_NAME : $_SERVER['SERVER_NAME'] ),
+			'noreply-email' => ( defined('SITE_NOREPLY') ? SITE_NOREPLY : 'noreply@' . $_SERVER['SERVER_NAME'] ),
+			'admin-email' => ( defined('SITE_ADMINEMAIL') ? SITE_ADMINEMAIL : 'webmaster@' . $_SERVER['SERVER_NAME'] ),
+			'shorturl-length' => ( defined('SITE_SHORTURLLENGTH') ? SITE_SHORTURLLENGTH : '7' ),
+			'validate-ip' => ( defined('SITE_VALIDATEIP') ? SITE_VALIDATEIP : true ),
+		),
+		'mail' => array(
+			'mailer' => ( defined('MAIL_MAILER') ? MAIL_MAILER : 'mail' ),
+			'smtp-server' => ( defined('SMTP_HOST') ? SMTP_HOST : 'localhost' ),
+			'smtp-port' => ( defined('SMTP_PORT') ? SMTP_PORT : '25' ),
+			'smtp-security' => ( defined('SMTP_SECURE') ? SMTP_SECURE : '' ),
+			'smtp-user' => ( defined('SMTP_USER') ? SMTP_USER : 'username' ),
+			'smtp-password' => ( defined('SMTP_PASS') ? SMTP_PASS : 'password' ),
+			'sendmail-path' => ( defined('SENDMAIL_PATH') ? SENDMAIL_PATH : '/usr/sbin/sendmail' ),
+		),
+		'mysql' => array(
+			'mysql-host' => ( defined('MYSQL_HOST') ? MYSQL_HOST : 'localhost' ),
+			'mysql-user' => ( defined('MYSQL_USER') ? MYSQL_USER : 'username' ),
+			'mysql-pass' => ( defined('MYSQL_PASS') ? MYSQL_PASS : 'password' ),
+			'mysql-database' => ( defined('MYSQL_DB') ? MYSQL_DB : 'database' ),
+			'mysql-table-prefix' => ( defined('MYSQL_PREFIX') ? MYSQL_PREFIX : 'lus_' ),
+		),
+	);
+	
+	$messages = array();
+	
+	// Make sure MySQLi is installed
+	if (!extension_loaded('mysqli')) {
+		$messages[] = 'PHP extension MySQLi is not installed.';
+	}
+	
+	// Make sure GD is installed
+	if (!extension_loaded('gd')) {
+		$messages[] = 'PHP extension GD is not installed.';
+	}
+	
+	// Make sure Hash is installed
+	if (!extension_loaded('hash')) {
+		$messages[] = 'PHP extension Hash is not installed.';
+	}
+	
+	// Make sure Session is installed
+	if (!extension_loaded('session')) {
+		$messages[] = 'PHP extension Session is not installed.';
+	}
+	
+	// Make sure JSON is installed
+	if (!extension_loaded('json')) {
+		$messages[] = 'PHP extension JSON is not installed.';
+	}
+	
+	// Make sure PHP version is at least v5.3
+	if (version_compare(PHP_VERSION, '5.3.0') < 0) {
+		$messages[] = 'You must be running at least PHP v5.3.0.';
+	}
+	
+	// Make sure config.php is writable
+	if (!is_writable('inc/config.php')) {
+		$messages[] = 'The file "config.php" in the "inc" directory must be writable.';
+	}
+	
+	if (count($messages) == 0 && ($_SERVER['REQUEST_METHOD'] && $_SERVER['REQUEST_METHOD'] == 'POST')) {
+		$site_options = $_POST['site'];
+		
+		if (!isset($site_options['url']) || !isset($site_options['ssl-url']) || !isset($site_options['name']) || !isset($site_options['noreply-email']) || !isset($site_options['admin-email']) || !isset($site_options['shorturl-length'])) {
+			$messages[] = 'One or more of the site settings is missing.';
+		}
+
+		$mail_options = $_POST['mail'];
+		
+		if (!isset($mail_options['mailer'])) {
+			$messages[] = "Mail method is missing.";
+		} else {
+			if ($mail_options['mailer'] == 'smtp') {
+				if (!isset($mail_options['smtp-server']) || !isset($mail_options['smtp-port']) || !isset($mail_options['smtp-security']) || !isset($mail_options['smtp-user']) || !isset($mail_options['smtp-password'])) {
+					$messages[] = "One or more of the SMTP settings is missing.";
+				}
+			} else if ($mail_options['mailer'] == 'sendmail') {
+				if (!isset($mail_options['sendmail-path'])) {
+					$messages[] = "Sendmail path is missing.";
+				}
+			}
+		}
+		
+		$mysql_options = $_POST['mysql'];
+		
+		if (!isset($mysql_options['mysql-host']) || !isset($mysql_options['mysql-user']) || !isset($mysql_options['mysql-pass']) || !isset($mysql_options['mysql-database']) || !isset($mysql_options['mysql-table-prefix'])) {
+			$messages[] = "One or more mysql setting is missing.";
+		}
+		
+		if (count($messages) == 0) {
+			// Validate site settings
+			$site_options['url'] = trim($site_options['url']);
+			$site_options['ssl-url'] = trim($site_options['ssl-url']);
+			$site_options['name'] = trim($site_options['name']);
+			$site_options['noreply-email'] = strtolower(trim($site_options['noreply-email']));
+			$site_options['admin-email'] = strtolower(trim($site_options['admin-email']));
+			$site_options['shorturl-length'] = trim($site_options['shorturl-length']);
+			
+			if (!filter_var($site_options['url'], FILTER_VALIDATE_URL)) {
+				$messages[] = "Site URL is invalid.";
+			}
+			
+			if (!filter_var($site_options['ssl-url'], FILTER_VALIDATE_URL)) {
+				$messages[] = "Site SSL URL is invalid.";
+			}
+			
+			if (empty($site_options['name'])) {
+				$messages[] = "Site name cannot be empty.";
+			}
+			
+			if (!filter_var($site_options['noreply-email'], FILTER_VALIDATE_EMAIL)) {
+				$messages[] = "No reply email address is invalid.";
+			}
+			
+			if (!filter_var($site_options['admin-email'], FILTER_VALIDATE_EMAIL)) {
+				$messages[] = "Admin email address is invalid.";
+			}
+			
+			if (!is_numeric($site_options['shorturl-length'])) {
+				$messages[] = "Short URL length must be number.";
+			} else if ($site_options['shorturl-length'] <= 0 || $site_options['shorturl-length'] > 100) {
+				$messages[] = "Short URL length must be between 1-100.";
+			}
+			
+			if (!isset($site_options['validate-ip']))
+				$site_options['validate-ip'] = false;
+			else
+				$site_options['validate-ip'] = true;
+				
+			// Validate mail settings
+			if ($mail_options['mailer'] != 'mail' && $mail_options['mailer'] != 'smtp' && $mail_options['mailer'] != 'sendmail') {
+				$messages[] = "Mail method must be either mail, smtp or sendmail.";
+			} else {
+				if ($mail_options['mailer'] == 'smtp') {
+					$mail_options['smtp-server'] = trim($mail_options['smtp-server']);
+					$mail_options['smtp-port'] = trim($mail_options['smtp-port']);
+					$mail_options['smtp-security'] = ( trim($mail_options['smtp-security']) == 'none' ? '' : trim($mail_options['smtp-security']) );
+					$mail_options['smtp-user'] = trim($mail_options['smtp-user']);
+					$mail_options['smtp-password'] = trim($mail_options['smtp-password']);
+					
+					if (empty($mail_options['smtp-server'])) {
+						$messages[] = "SMTP server cannot be empty.";
+					} else if (strpos($mail_options['smtp-server'], ' ') !== false) {
+						$messages[] = "SMTP server cannot have spaces.";
+					} else if (!filter_var($mail_options['smtp-server'], FILTER_VALIDATE_IP)) {
+						// Make sure hostname resolves
+						if (gethostbyname($mail_options['smtp-server']) == $mail_options['smtp-server']) {
+							$messages[] = "SMTP server doesn't resolve to a IP address.";
+						}
+					}
+					
+					if (!is_numeric($mail_options['smtp-port'])) {
+						$messages[] = "SMTP port must be a number";
+					} else if ($mail_options['smtp-port'] <= 0 || $mail_options['smtp-port'] >= 65535) {
+						$messages[] = "SMTP port must be a number between 1-65534.";
+					}
+					
+					if ($mail_options['smtp-security'] != '' && $mail_options['smtp-security'] != 'ssl' && $mail_options['smtp-security'] != 'tls') {
+						$messages[] = "SMTP Security is not valid.";
+					}
+					
+					if (empty($mail_options['smtp-user'])) {
+						$messages[] = "SMTP username cannot be empty.";
+					} else if (strpos($mail_options['smtp-user'], ' ') !== false) {
+						$messages[] = "SMTP username cannot have spaces.";
+					}
+					
+					if (empty($mail_options['smtp-password'])) {
+						$messages[] = "SMTP password cannot be empty.";
+					} else if (strpos($mail_options['smtp-password'], ' ') !== false) {
+						$messages[] = "SMTP password cannot have spaces.";
+					}
+				} else if ($mail_options['mailer'] == 'sendmail') {
+					$mail_options['sendmail-path'] = trim($mail_options['sendmail-path']);
+					
+					if (empty($mail_options['sendmail-path'])) {
+						$messages[] = "Sendmail path cannot be empty.";
+					}
+				}
+			}
+			
+			// Validate MySQL settings
+			$mysql_options['mysql-host'] = trim($mysql_options['mysql-host']);
+			$mysql_options['mysql-user'] = trim($mysql_options['mysql-user']);
+			$mysql_options['mysql-pass'] = trim($mysql_options['mysql-pass']);
+			$mysql_options['mysql-database'] = trim($mysql_options['mysql-database']);
+			$mysql_options['mysql-table-prefix'] = trim($mysql_options['mysql-table-prefix']);
+			
+			if (empty($mysql_options['mysql-host'])) {
+				$messages[] = "MySQL hostname cannot be empty.";
+			}
+			
+			if (empty($mysql_options['mysql-user'])) {
+				$messages[] = "MySQL username cannot be empty.";
+			}
+			
+			if (empty($mysql_options['mysql-pass'])) {
+				$messages[] = "MySQL password cannot be empty.";
+			}
+			
+			if (empty($mysql_options['mysql-database'])) {
+				$messages[] = "MySQL database cannot be empty.";
+			}
+			
+			if (strpos($mysql_options['mysql-table-prefix'], ' ') !== false) {
+				$messages[] = "MySQL table prefix cannot have spaces.";
+			}
+			
+			
+			// Attempt connection to MySQL
+			$mysqli = @mysqli_connect($mysql_options['mysql-host'], $mysql_options['mysql-user'], $mysql_options['mysql-pass'], $mysql_options['mysql-database']);
+			
+			if (!$mysqli) {
+				$messages[] = 'MySQL connect error (' . mysqli_connect_errno() . ') ' . mysqli_connect_error();
+			}
+			
+			if (count($messages) == 0) {
+				// We are go for installation!
+				
+				$config_text = <<<PHP
+<?php
+// Website config
+define('SITE_URL', '{$site_options['url']}');
+define('SITE_SSLURL', '{$site_options['ssl-url']}');
+define('SITE_NAME', '{$site_options['name']}');
+define('SITE_NOREPLY', '{$site_options['noreply-email']}');
+define('SITE_ADMINEMAIL', '{$site_options['admin-email']}');
+define('SITE_SHORTURLLENGTH', {$site_options['shorturl-length']});
+define('SITE_VALIDATEIP', {$site_options['validate-ip']}); // If true, sessions are locked to one IP address
+
+// Mailer to use (Can be mail, smtp, or sendmail)
+// If using SMTP, or sendmail be sure to configure it properly below
+define('MAIL_MAILER', '{$mail_options['mailer']}');
+
+// SMTP server info
+define('SMTP_HOST', '{$mail_options['smtp-server']}');
+define('SMTP_PORT', {$mail_options['smtp-port']});
+define('SMTP_SECURE', '{$mail_options['smtp-security']}'); // Can be ssl, tls or blank for none
+define('SMTP_USER', '{$mail_options['smtp-user']}');
+define('SMTP_PASS', '{$mail_options['smtp-password']}');
+
+// Sendmail path
+define('SENDMAIL_PATH', '{$mail_options['sendmail-path']}');
+
+// MySQL config
+define('MYSQL_HOST', '{$mysql_options['mysql-host']}');
+define('MYSQL_USER', '{$mysql_options['mysql-user']}');
+define('MYSQL_PASS', '{$mysql_options['mysql-pass']}');
+define('MYSQL_DB', '{$mysql_options['mysql-database']}');
+define('MYSQL_PREFIX', '{$mysql_options['mysql-table-prefix']}');
+PHP;
+
+				if (file_put_contents('inc/config.php', $config_text) === false) {
+					$messages[] = 'Error writing to "inc/config.php".';
+				} else {
+					$sql = <<<SQL
+CREATE TABLE IF NOT EXISTS `{$mysql_options['mysql-table-prefix']}urls` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `short_url` varchar(8) NOT NULL,
+  `long_url` text NOT NULL,
+  `user` int(11) NOT NULL,
+  `visits` int(11) NOT NULL,
+  PRIMARY KEY (`short_url`),
+  KEY `id` (`id`)
+);
+
+CREATE TABLE IF NOT EXISTS `{$mysql_options['mysql-table-prefix']}users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(255) NOT NULL,
+  `last_name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `birthday` date NOT NULL,
+  `password` varchar(83) NOT NULL,
+  `api_key` varchar(33) NOT NULL,
+  `new_email_key` varchar(33) NOT NULL,
+  `new_email` varchar(255) NOT NULL,
+  `reset_password_key` varchar(33) NOT NULL,
+  `activate_key` varchar(33) NOT NULL,
+  PRIMARY KEY (`email`),
+  KEY `id` (`id`)
+);
+SQL;
+					if (mysqli_multi_query($mysqli, $sql) === false) {
+						$messages[] = "Error creating tables in MySQL database.";
+					} else {
+						$success_message = "Little URL Shortener has been installed. Please remove or rename install.php.";
+					}
+				
+					$mysqli->close();
+				}
+
+				
+			}
+		}
+		
+		$default_values = array_merge($default_values, array('site' => $site_options, 'mail' => $mail_options, 'mysql' => $mysql_options));
+	}
+?>
+<html>
+	<head>
+		<title>Little URL Shortener Install</title>
+		
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$("#mailer").change(function() {
+					mailer = $("#mailer option:selected").val();
+					
+					$("#smtp-options:visible,#sendmail-options:visible").slideUp();
+					
+					if (mailer == "smtp") {
+						$("#smtp-options").slideDown();
+					} else if (mailer == "sendmail") {
+						$("#sendmail-options").slideDown();
+					}
+				});
+				
+				$("#mailer").change();
+			});
+		</script>
+		<link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css' />
+		<style type="text/css">
+			html, body, div, span, applet, object, iframe,
+			h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+			a, abbr, acronym, address, big, cite, code,
+			del, dfn, em, img, ins, kbd, q, s, samp,
+			small, strike, strong, sub, sup, tt, var,
+			b, u, i, center,
+			dl, dt, dd, ol, ul, li,
+			fieldset, form, label, legend,
+			table, caption, tbody, tfoot, thead, tr, th, td,
+			article, aside, canvas, details, embed, 
+			figure, figcaption, footer, header, hgroup, 
+			menu, nav, output, ruby, section, summary,
+			time, mark, audio, video {
+				margin: 0;
+				padding: 0;
+				border: 0;
+				font-size: 100%;
+				font: inherit;
+				vertical-align: baseline;
+			}
+			/* HTML5 display-role reset for older browsers */
+			article, aside, details, figcaption, figure, 
+			footer, header, hgroup, menu, nav, section {
+				display: block;
+			}
+			body {
+				line-height: 1;
+				background-color: #232323;
+			}
+			ol, ul {
+				list-style: none;
+			}
+			blockquote, q {
+				quotes: none;
+			}
+			blockquote:before, blockquote:after,
+			q:before, q:after {
+				content: '';
+				content: none;
+			}
+			table {
+				border-collapse: collapse;
+				border-spacing: 0;
+			}
+
+			body {
+				background-color: #fff;
+				color: #000;
+				
+			}
+			
+			.main {
+				
+			}
+			
+			.main > p {
+				font: 700 14px 'Montserrat', sans-serif;
+				text-align: center;
+				margin: 20px 0;
+			}
+			
+			.main > form > div {
+				background-color: #EBE7DF;
+				border: 3px solid #1F7F5C;
+				width: 959px;
+				margin: 0 auto 17px;
+			}
+			
+			.main > form > div > p {
+				font: 700 14px 'Montserrat', sans-serif;
+				text-align: center;
+				margin: 20px 0;
+			}
+			
+			.main > form > div > ul li {
+				font: 14px 'Montserrat', sans-serif;
+				margin: 10px auto;
+				clear: both;
+				height: 23px; 
+				width: 400px; 
+			}
+			
+			.main > form > div > ul li > label {
+				display: block;
+				float: left;
+				width: 132px;
+				text-align: right;
+				padding-right: 10px;
+			}
+			
+			.main > form > div > ul li > input[type="text"], .main > form > div > ul li > select {
+				float: left;
+				width: 255px;
+				font: inherit;
+			}
+			
+			.main > form > div > input[type="submit"] {
+				background-color: #1F7F5C;
+				border: 0 none;
+				color: #FFFFFF;
+				cursor: pointer;
+				display: block;
+				font: 18px 'Montserrat',sans-serif;
+				height: 61px;
+				margin: 10px auto;
+				text-align: center;
+				width: 112px;
+			}
+			
+			.errors {
+				width: 959px;
+				background: url("images/warning.png") no-repeat scroll 247px 13px #FBE3E4;
+				margin: 15px auto;
+				border: 3px solid #8A1F11;
+			}
+			
+			.errors > p {
+				font: 700 18px/61px 'Montserrat',sans-serif;
+				text-align: center;
+				color: #8A1F11;
+			}
+			
+			.errors > ul > li {
+				font: 18px/61px 'Montserrat',sans-serif;
+				text-align: center;
+			}
+			
+			.success {
+				width: 959px;
+				margin: 15px auto; 
+				text-align: center; 
+				background-color: #1F7F5C; 
+				font: 700 18px/61px 'Montserrat',sans-serif;
+				color: #fff;
+			}
+		</style>
+	</head>
+	<body>
+		<?php if (count($messages) > 0) : ?>
+		<div class="errors">
+			<p>Attention! Please correct the errors below.</p>
+			<ul>
+				<?php foreach ($messages as $message) : ?>
+				<li><?php echo $message ?></li>
+				<?php endforeach; ?>
+			</ul>
+		</div>
+		<?php endif; ?>
+		<?php if (isset($success_message)) : ?>
+			<div class="success"><?php echo $success_message ?></div>
+		<?php endif; ?>
+		<div class="main">
+			<p>Install Little URL Shortener</p>
+			<form action="install.php" method="post">
+				<div class="site">
+					<p>Site Configuration</p>
+					<ul>
+						<li><label for="url">URL: </label><input type="text" name="site[url]" id="url" value="<?php echo $default_values['site']['url'] ?>" /></li>
+						<li><label for="ssl-url">SSL URL: </label><input type="text" name="site[ssl-url]" id="ssl-url" value="<?php echo $default_values['site']['ssl-url'] ?>" /></li>
+						<li><label for="name">Site Name: </label><input type="text" name="site[name]" id="name" value="<?php echo $default_values['site']['name'] ?>" /></li>
+						<li><label for="noreply-email">No Reply Email: </label><input type="text" name="site[noreply-email]" id="noreply" value="<?php echo $default_values['site']['noreply-email'] ?>" /></li>
+						<li><label for="admin-email">Admin Email: </label><input type="text" name="site[admin-email]" id="admin-email" value="<?php echo $default_values['site']['admin-email'] ?>" /></li>
+						<li><label for="shorturl-length">Short URL Length: </label><input type="text" name="site[shorturl-length]" id="shorturl-length" style="width: 50px" value="<?php echo $default_values['site']['shorturl-length'] ?>" /></li>
+						<li><label for="validate-ip">Validate IP?</label><input type="checkbox" name="site[validate-ip]" id="validate-ip" <?php echo ( $default_values['site']['url'] == true ? 'checked' : '' ) ?> /></li>
+					</ul>
+				</div>
+				<div class="mail">
+					<p>Mail Configuration</p>
+					<ul>
+						<li>
+							<label for="mailer">Mailer: </label>
+							<select name="mail[mailer]" id="mailer">
+								<option value="mail" <?php echo ( $default_values['mail']['mailer'] == 'mail' ? 'selected' : '' ) ?>>PHP Mail()</option>
+								<option value="smtp" <?php echo ( $default_values['mail']['mailer'] == 'smtp' ? 'selected' : '' ) ?>>SMTP</option>
+								<option value="sendmail" <?php echo ( $default_values['mail']['mailer'] == 'sendmail' ? 'selected' : '' ) ?>>Sendmail</option>
+							</select>
+						</li>
+						<div id="smtp-options" style="display: none">
+							<li><label for="smtp-server">SMTP Server: </label><input type="text" name="mail[smtp-server]" id="smtp-server" value="<?php echo $default_values['mail']['smtp-server'] ?>" /></li>
+							<li><label for="smtp-port">SMTP Port: </label><input type="text" name="mail[smtp-port]" id="smtp-port" value="<?php echo $default_values['mail']['smtp-port'] ?>" /></li>
+							<li>
+								<label for="smtp-security">SMTP Security: </label>
+								<select name="mail[smtp-security]" id="smtp-security">
+									<option value="none" <?php echo ( $default_values['mail']['smtp-security'] == '' ? 'selected' : '' ) ?>>None</option>
+									<option value="ssl" <?php echo ( $default_values['mail']['smtp-security'] == 'ssl' ? 'selected' : '' ) ?>>SSL</option>
+									<option value="tls" <?php echo ( $default_values['mail']['smtp-security'] == 'tls' ? 'selected' : '' ) ?>>TLS</option>
+								</select>
+							</li>
+							<li><label for="smtp-user">SMTP User: </label><input type="text" name="mail[smtp-user]" id="smtp-user" value="<?php echo $default_values['mail']['smtp-user'] ?>" /></li>
+							<li><label for="smtp-password">SMTP Password: </label><input type="text" name="mail[smtp-password]" id="smtp-password" value="<?php echo $default_values['mail']['smtp-password'] ?>" /></li>
+						</div>
+						<div id="sendmail-options" style="display: none">
+							<li><label for="sendmail-path">Sendmail Path: </label><input type="text" name="mail[sendmail-path]" id="sendmail-path" value="<?php echo $default_values['mail']['sendmail-path'] ?>" /></li>
+						</div>
+					</ul>
+				</div>
+				<div class="mysql">
+					<p>MySQL Configuration</p>
+					<ul>
+						<li><label for="mysql-host">MySQL Hostname: </label><input type="text" name="mysql[mysql-host]" id="mysql-host" value="<?php echo $default_values['mysql']['mysql-host'] ?>" /></li>
+						<li><label for="mysql-user">MySQL User: </label><input type="text" name="mysql[mysql-user]" id="mysql-user" value="<?php echo $default_values['mysql']['mysql-user'] ?>" /></li>
+						<li><label for="mysql-pass">MySQL Password: </label><input type="text" name="mysql[mysql-pass]" id="mysql-pass" value="<?php echo $default_values['mysql']['mysql-pass'] ?>" /></li>
+						<li><label for="mysql-database">MySQL Database: </label><input type="text" name="mysql[mysql-database]" id="mysql-database" value="<?php echo $default_values['mysql']['mysql-database'] ?>" /></li>
+						<li><label for="mysql-table-prefix">Table Prefix: </label><input type="text" name="mysql[mysql-table-prefix]" id="mysql-table-prefix" value="<?php echo $default_values['mysql']['mysql-table-prefix'] ?>" /></li>
+					</ul>
+				</div>
+				<div class="install">
+					<p>Click the button below to install Little URL Shortener</p>
+					<input type="submit" name="submit" value="Install" />
+				</div>
+			</form>
+		</div>
+	</body>
+</html>

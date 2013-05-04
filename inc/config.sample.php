@@ -1,0 +1,32 @@
+<?php
+if (!defined('LUS_LOADED')) die('This file cannot be loaded directly');
+
+// Website config
+define('SITE_URL', 'http://www.example.com');
+define('SITE_SSLURL', 'https://www.example.com');
+define('SITE_NAME', 'Your site name');
+define('SITE_NOREPLY', 'noreply@example.com');
+define('SITE_ADMINEMAIL', 'webmaster@example.com');
+define('SITE_SHORTURLLENGTH', 7);
+define('SITE_VALIDATEIP', true); // If true, sessions are locked to one IP address
+
+// Mailer to use (Can be mail, smtp, or sendmail)
+// If using SMTP, or sendmail be sure to configure it properly below
+define('MAIL_MAILER', 'mail');
+
+// SMTP server info
+define('SMTP_HOST', 'localhost');
+define('SMTP_PORT', 25);
+define('SMTP_SECURE', ''); // Can be ssl, tls or blank for none
+define('SMTP_USER', 'username');
+define('SMTP_PASS', 'password');
+
+// Sendmail path
+define('SENDMAIL_PATH', '/usr/sbin/sendmail');
+
+// MySQL config
+define('MYSQL_HOST', 'localhost');
+define('MYSQL_USER', 'user');
+define('MYSQL_PASS', 'pass123');
+define('MYSQL_DB', 'database');
+define('MYSQL_PREFIX', 'lus_');
