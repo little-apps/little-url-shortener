@@ -204,14 +204,14 @@
 			</div>
 			<div id="bottom" style="padding-bottom: 20px; width: 959px; margin: 0px auto;">
 				<p id="title">API Documentation</p>
-				<p id="text">Developers can create shortened URLs simply and easily with the 7LS.NET. The API accepts data using the GET method and the result is returned using JSON.</p>
+				<p id="text">Developers can create shortened URLs simply and easily with the <?php echo SITE_NAME ?> API. The API accepts data using the GET method and the result is returned using JSON.</p>
 				<div id="tabs">
 					<ul>
 						<li><a href="#up">Create URL</a></li>
 						<li><a href="#down">Get URL</a></li>
 					</ul>
 					<div id="up">
-						<p>Shortened URLs can be created by sending a GET request to the API which is located at http://www.7ls.net/api.php. The parameters for the get request are below:</p>
+						<p>Shortened URLs can be created by sending a GET request to the API which is located at <?php echo SITE_URL ?>/api.php. The parameters for the get request are below:</p>
 						<table>
 							<thead>
 								<tr>
@@ -249,7 +249,7 @@ $url = "http://www.google.com";
 $api_key = "<?php echo $api_key ?>";
 
 // Initalize cURL
-$ch = curl_init("http://www.7ls.net/api.php?request=create&url=".urlencode($url)."&key=".$api_key);
+$ch = curl_init("<?php echo SITE_URL ?>/api.php?request=create&url=".urlencode($url)."&key=".$api_key);
 
 // Don't get header
 curl_setopt($ch, CURLOPT_HEADER, false);
@@ -285,7 +285,7 @@ echo "The short URL for ".$url." is ".$shorturl;
 <pre><code class="json">
 {
 	"status": "success",
-	"shorturl": "http://7ls.net/abcdefg",
+	"shorturl": "<?php echo SITE_URL ?>/abcdefg",
 	"longurl": "http://www.google.com"
 }
 </code></pre>
@@ -298,7 +298,7 @@ echo "The short URL for ".$url." is ".$shorturl;
 </code></pre>
 					</div>
 					<div id="down">
-						<p>Short URLs can be turned into long URLs by sending a GET request to the API which is located at http://www.7ls.net/api.php. The parameters for the get request are below:</p>
+						<p>Short URLs can be turned into long URLs by sending a GET request to the API which is located at <?php echo SITE_URL ?>/api.php. The parameters for the get request are below:</p>
 						<table>
 							<thead>
 								<tr>
@@ -326,10 +326,10 @@ echo "The short URL for ".$url." is ".$shorturl;
 
 // Short URL to get long URL for 
 // Can also be "abcdefg"
-$url = "http://www.7ls.net/abcdefg";
+$url = "<?php echo SITE_URL ?>/abcdefg";
 
 // Initalize cURL
-$ch = curl_init("http://www.7ls.net/api.php?request=get&url=".urlencode($url));
+$ch = curl_init("<?php echo SITE_URL ?>/api.php?request=get&url=".urlencode($url));
 
 // Don't get header
 curl_setopt($ch, CURLOPT_HEADER, false);
@@ -365,7 +365,7 @@ echo "The long URL for ".$url." is ".$longurl;
 <pre><code class="json">
 {
 	"status": "success",
-	"shorturl": "http://7ls.net/abcdefg",
+	"shorturl": "<?php echo SITE_URL ?>/abcdefg",
 	"longurl": "http://www.google.com"
 }
 </code></pre>
