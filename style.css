@@ -345,7 +345,6 @@ table {
 	background-color: #232323;
     height: 258px;
     position: fixed;
-    right: 66px;
     width: 415px;
     z-index: 9999;
 }
@@ -391,11 +390,11 @@ table {
 
 #signinbox ul input#password + span > a {
 	font: 13px 'Montserrat', sans-serif; 
-	color: rgba(255,255,255,.20);
-	text-decoration: none;
+	color: rgba(255,255,255,.20) !important;
+	text-decoration: none !important;
 }
 
-#signinbox ul input#password + span > a:hover { color: #fff; }
+#signinbox ul input#password + span > a:hover { color: #fff !important; }
 
 #signinbox ul li#bottom { 
 	clear: both;
@@ -430,7 +429,7 @@ table {
 }
 
 #signinbox ul li#bottom #submit {
-	margin-left: 121px;
+	margin-left: 112px;
 	padding: 0; 
 	background: no-repeat url(images/menu/signin/submit.png);
 	width: 51px;

@@ -1,6 +1,11 @@
 jQuery.noConflict();
 
 jQuery(document).ready(function($) {
+	if (window.screen.width <= 1366) {
+		// Make signupbox visible by having it up against the side
+		$("#signinbox").css("right", "0px");
+	}
+	
 	$("#topmenu > #nav > #login > #signin > a").click(function(e) {
 		if ($("#registerbox").is(":visible")) {
 			$("#registerbox").slideUp(400, function() { $("#topmenu > #nav > #login > #register").removeClass("selected"); });

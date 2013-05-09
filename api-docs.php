@@ -84,7 +84,26 @@
 <?php else : ?>
 				<div id="login">
 					<div id="register"><a href="#">Register</a></div>
-					<div id="signin"><a href="#">Sign In</a></div>
+					<div id="signin">
+						<a href="#">Sign In</a>
+						<div id="signinbox">
+							<form action="login.php" method="post">
+								<input type="hidden" name="action" value="login" />
+								<input type="hidden" name="token" value="<?php echo $csrf_token; ?>" />
+								<ul>
+									<li><input type="text" name="username" id="username" placeholder="Email" value="" /></li>
+									<li>
+										<input type="password" name="password" id="password" placeholder="Password" value="" />
+										<span><a href="forgot-password.php">Forgot Password?</a></span>
+									</li>
+									<li id="bottom">
+										<span style="display: inline-block;"><input type="checkbox" name="remember" id="remember" /><label for="remember"> Remember Me</label></span>
+										<span><input type="submit" name="submit" id="submit" /></span>
+									</li>
+								</ul>
+							</form>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
