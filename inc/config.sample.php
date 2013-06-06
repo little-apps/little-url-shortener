@@ -10,6 +10,11 @@ define('SITE_ADMINEMAIL', 'webmaster@example.com');
 define('SITE_SHORTURLLENGTH', 7);
 define('SITE_VALIDATEIP', true); // If true, sessions are locked to one IP address
 
+// Facebook login
+define('FBLOGIN_ENABLED', false); // Set to true to allow Facebook login
+define('FBLOGIN_APPID', ''); // Facebook App ID
+define('FBLOGIN_APPSECRET', ''); // Facebook App Secret
+
 // Mailer to use (Can be mail, smtp, or sendmail)
 // If using SMTP, or sendmail be sure to configure it properly below
 define('MAIL_MAILER', 'mail');

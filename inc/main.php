@@ -20,7 +20,7 @@
 if (!defined('LUS_LOADED')) die('This file cannot be loaded directly');
 
 // Uncomment this to enable debugging (not recommended)
-error_reporting(0);
+error_reporting(E_ALL);
 
 require_once(dirname(__FILE__).'/config.php');
 require_once(dirname(__FILE__).'/functions.php');
@@ -46,6 +46,9 @@ session_start();
 $min_year = date('Y', strtotime('-100 years'));
 $max_year = date('Y', strtotime('-10 years'));
 
+// Initilaze message variables
+$messages = array();
+
 // If CSRF token was sent in POST, check if it's valid
 if ((isset($_POST['token']) && isset($_SESSION['csrf_token'])) && $_POST['token'] == $_SESSION['csrf_token'])  {
 	$csrf_valid = true;
@@ -59,6 +62,7 @@ $_SESSION['csrf_token'] = $csrf_token;
 
 // Check if logged in
 $logged_in = false;
+$fb_logged_in = false;
 
 if (isset($_COOKIE['7LSNETUID']) && isset($_COOKIE['7LSNETHASH'])) {
 	$_SESSION['user_id'] = $_COOKIE['7LSNETUID'];
@@ -88,6 +92,116 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_hash'])) {
 	unset($pass_hash);
 }
 
+// Check if logged in with Facebook
+if (FBLOGIN_ENABLED == true && defined('FBLOGIN_APPID') && defined('FBLOGIN_APPSECRET') ) {
+	require_once(dirname(__FILE__).'/facebook-api/facebook.php');
+	
+	$facebook = new Facebook(array('appId'  => FBLOGIN_APPID, 'secret' => FBLOGIN_APPSECRET));
+	
+	// Get User ID
+	$user = $facebook->getUser();
+	
+	// See if access token is valid
+	if ($user) {
+		try {
+			// Proceed knowing you have a logged in user who's authenticated.
+			$user_profile = $facebook->api('/me');
+		} catch (FacebookApiException $e) {
+			error_log($e);
+			$user = null;
+			$facebook->destroySession();
+		}
+		
+		// Make sure we have proper permissions
+		$permissions = $facebook->api("/me/permissions");
+		$permissions = $permissions['data'][0];
+		
+		if ($permissions['email'] !== 1 ||
+			$permissions['user_about_me'] !== 1 ||
+			$permissions['user_birthday'] !== 1) {
+			$user = null;
+			$messages[] = 'There seems to be a missing permission from Facebook. Please try logging in again.';
+		}
+	}
+	
+	if ($user) {
+		if ($logged_in === true) {
+			// Were already logged in and validated, no need to query database
+			$fb_logged_in = true;
+		} else {
+			$user_email = $user_profile['email'];
+		
+			// Lookup user
+			$stmt = $mysqli->prepare("SELECT id, password FROM `".MYSQL_PREFIX."users` WHERE email = ? LIMIT 0,1");
+			$stmt->bind_param('s', $user_email);
+			$stmt->execute();
+			
+			$stmt->bind_result($user_id, $pass_hash);
+			
+			$user_ip = ((SITE_VALIDATEIP == true) ? $_SERVER['REMOTE_ADDR'] : '');
+
+			if ($stmt->fetch() === true) {
+				$_SESSION['user_id'] = $user_id;
+				$_SESSION['user_hash'] = md5($user_id.$user_email.$pass_hash.$user_ip);
+				$logged_in = true;
+				$fb_logged_in = true;
+				
+				$stmt->close();
+			} else {
+				// Not registered yet
+				$stmt->close();
+				
+				// Get info from FB
+				$first_name = $user_profile['first_name'];
+				$last_name = $user_profile['last_name'];
+				$email = $user_profile['email'];
+				
+				// Convert birthdate to valid string format
+				$birthdate = date('Y-m-d', $user_profile['birthday']);
+			
+				// Hash password
+				require_once(dirname(__FILE__).'/passhash.class.php');
+				$pass_hash = PassHash::hash(uniqid());
+				
+				// Generate API Key
+				$api_key = md5(uniqid('api_'));
+				
+				// Generate activation key
+				$activate_key = '';
+			
+				// Insert new user
+				$stmt = $mysqli->prepare("INSERT INTO `".MYSQL_PREFIX."users` (`first_name`,`last_name`,`email`,`birthday`,`password`,`api_key`,`activate_key`) VALUES (?,?,?,?,?,?,?)");
+				$stmt->bind_param('sssssss', $first_name, $last_name, $email, $birthdate, $pass_hash, $api_key, $activate_key);
+				$stmt->execute();
+				$stmt->close();
+				
+				// Get user ID
+				$stmt = $mysqli->prepare("SELECT id FROM `".MYSQL_PREFIX."users` WHERE email = ? LIMIT 0,1");
+				$stmt->bind_param('s', $email);
+				$stmt->execute();
+				
+				$stmt->bind_result($user_id);
+				
+				$stmt->close();
+			
+				// Login user
+				$_SESSION['user_id'] = $user_id;
+				$_SESSION['user_hash'] = md5($user_id.$user_email.$pass_hash.$user_ip);
+				$logged_in = true;
+				$fb_logged_in = true;
+			}
+
+			// Clear results
+			unset($user_email);
+			unset($pass_hash);
+		
+		}
+	} 
+	
+	// Get login URL
+	$fb_login_url = $facebook->getLoginUrl(array('scope' => 'email,user_about_me,user_birthday', 'redirect_uri' => SITE_URL . '/account.php'));
+}
+
 if ($logged_in == false) {
 	// Clear cookies (if they exist)
 	if (isset($_COOKIE['7LSNETUID']) || isset($_COOKIE['7LSNETHASH'])) {
@@ -95,9 +209,6 @@ if ($logged_in == false) {
 		setcookie("7LSNETHASH", "", time()-3600);
 	}
 }
-
-// Initilaze message variables
-$messages = array();
 
 // Create URL?
 if ($csrf_valid == true && isset($_POST['url'])) {

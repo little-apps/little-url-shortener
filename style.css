@@ -215,8 +215,16 @@ table {
 	color:#fff;
 }
 
+#registerbox ul li.submit > .social {
+	float: left; 
+	margin-left: 20px;
+}
+
+#registerbox ul li.submit > .social > a > img { float: left; }
+
 #registerbox ul li.submit input {
 	float: right;
+	margin-top: 5px;
 	margin-right: 26px;
 	padding: 0; 
 	background: no-repeat url(images/menu/register/submit.png);
@@ -343,8 +351,8 @@ table {
 #signinbox { 
 	display: none;
 	background-color: #232323;
-    height: 258px;
-    position: fixed;
+    height: 272px;
+    position: absolute;
     width: 415px;
     z-index: 9999;
 }
@@ -383,53 +391,66 @@ table {
 	color: rgb(31,127,92);
 }
 
-#signinbox ul input#password + span {
+#signinbox ul li span.remember { 
+	display: inline-block; 
+	float: left;
+	margin-top: 14px
+}
+
+#signinbox ul li span.remember #remember { display: none; }
+
+#signinbox ul li span.remember #remember + label:before {
+    background-color: #5a9aa8;
+	vertical-align: top;
+    content: " ";
+    display: inline-block;
+    height: 16px;
+    padding: 0;
+    position: relative;
+    width: 16px;
+	margin-right: 8px;
+	cursor: pointer;
+}
+
+#signinbox ul li span.remember #remember:checked + label:before {
+	background: #5a9aa8 center no-repeat url(images/menu/signin/check.png);
+}
+
+#signinbox ul li span.remember #remember + label {
+	font: 13px 'Montserrat', sans-serif;
+	text-transform: none;
+	color: #fff;
+	cursor: pointer;
+}
+
+#signinbox ul li span.forgot {
 	float: right; 
 	margin-top: 14px;
 }
 
-#signinbox ul input#password + span > a {
+#signinbox ul li span.forgot > a {
 	font: 13px 'Montserrat', sans-serif; 
 	color: rgba(255,255,255,.20) !important;
-	text-decoration: none !important;
+	text-transform: none;
 }
 
 #signinbox ul input#password + span > a:hover { color: #fff !important; }
 
 #signinbox ul li#bottom { 
+	padding-top: 15px;
 	clear: both;
 	height: 80px; 
 	vertical-align: middle; 
 	line-height: 80px; 
 }
 
-#signinbox ul li#bottom #remember { display: none; }
-
-#signinbox ul li#bottom #remember + label:before {
-    background-color: #5a9aa8;
-	vertical-align: top;
-    content: " ";
-    display: inline-block;
-    height: 22px;
-    padding: 0;
-    position: relative;
-    width: 22px;
-	margin-right: 19px;
-	cursor: pointer;
-}
-
-#signinbox ul li#bottom #remember:checked + label:before {
-	background: #5a9aa8 center no-repeat url(images/menu/signin/check.png);
-}
-
-#signinbox ul li#bottom #remember + label {
-	font: 18px 'Montserrat', sans-serif;
-	color: #fff;
-	cursor: pointer;
+#signinbox ul li#bottom .social, #signinbox ul li#bottom .social > a > img {
+	float: left;
 }
 
 #signinbox ul li#bottom #submit {
-	margin-left: 112px;
+	margin: 5px 0;
+	float: right;
 	padding: 0; 
 	background: no-repeat url(images/menu/signin/submit.png);
 	width: 51px;
@@ -508,18 +529,18 @@ table {
 	color: rgb(31,127,92);
 }
 
-#bottom > #signin ul input#password + span {
+#bottom > #signin ul li .forgot {
 	float: right; 
 	margin-top: 14px;
 }
 
-#bottom > #signin ul input#password + span > a {
-	font: 13px 'Montserrat', sans-serif; 
+#bottom > #signin ul li .forgot > a {
+	font: 18px 'Montserrat', sans-serif; 
 	color: rgba(255,255,255,.20);
 	text-decoration: none;
 }
 
-#bottom > #signin ul input#password + span > a:hover { color: #fff; }
+#bottom > #signin ul li .forgot > a:hover { color: #fff; }
 
 #bottom > #signin ul li#bottom, #bottom > #forgotpw ul li#bottom, #bottom > #resetpw ul li#bottom { 
 	clear: both;
@@ -529,9 +550,13 @@ table {
 	background-color: #232323;
 }
 
-#bottom > #signin ul li#bottom #remember-page { display: none; }
+#bottom > #signin ul li .remember { 
+	float: left; 
+	margin-top: 14px;
+}
+#bottom > #signin ul li .remember #remember-page { display: none; }
 
-#bottom > #signin ul li#bottom #remember-page + label:before {
+#bottom > #signin ul li .remember #remember-page + label:before {
     background-color: #5a9aa8;
 	vertical-align: top;
     content: " ";
@@ -540,19 +565,23 @@ table {
     padding: 0;
     position: relative;
     width: 22px;
-	margin-right: 19px;
+	margin-right: 9px;
 	cursor: pointer;
 }
 
-#bottom > #signin ul li#bottom #remember-page:checked + label:before {
+#bottom > #signin ul li .remember #remember-page:checked + label:before {
 	background: #5a9aa8 center no-repeat url(images/menu/signin/check.png);
 }
 
-#bottom > #signin ul li#bottom #remember-page + label {
+#bottom > #signin ul li .remember #remember-page + label {
 	font: 18px 'Montserrat', sans-serif;
 	color: #fff;
 	cursor: pointer;
 }
+
+#bottom > #signin ul li#bottom { padding-top: 10px; }
+
+#bottom > #signin ul li#bottom .social, #bottom > #signin ul li#bottom .social > a > img { float: left; }
 
 #bottom > #signin ul li#bottom #submit, #bottom > #forgotpw ul li#bottom #submit, #bottom > #resetpw ul li#bottom #submit {
 	padding: 0; 
@@ -563,7 +592,7 @@ table {
 	font-size: 0;
 	vertical-align: middle;
 	float: right; 
-	margin-top: 18px;
+	margin: 5px 0;
 }
 
 #bottom > #signin ul li#bottom #submit:hover, #bottom > #forgotpw ul li#bottom #submit:hover, #bottom > #resetpw ul li#bottom #submit:hover { cursor: pointer; }

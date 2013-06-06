@@ -46,6 +46,18 @@
 			setcookie("7LSNETHASH", "", time()-3600);
 		}
 		
+		if ($fb_logged_in === true) {
+			if (!isset($facebook)) {
+				require_once(dirname(__FILE__).'/inc/facebook-api/facebook.php');
+				$facebook = new Facebook(array('appId'  => FBLOGIN_APPID, 'secret' => FBLOGIN_APPSECRET));
+			}
+		
+			$facebook->destroySession();
+			
+			// Get login URL
+			$fb_login_url = $facebook->getLoginUrl(array('scope' => 'email,user_about_me,user_birthday', 'redirect_uri' => SITE_URL . '/account.php'));
+		}
+		
 		// Create new session
 		session_start();
 		session_regenerate_id(true);
@@ -284,13 +296,16 @@
 								<input type="hidden" name="token" value="<?php echo $csrf_token; ?>" />
 								<ul>
 									<li><input type="text" name="username" id="username" placeholder="Email" value="" /></li>
+									<li><input type="password" name="password" id="password" placeholder="Password" value="" /></li>
 									<li>
-										<input type="password" name="password" id="password" placeholder="Password" value="" />
-										<span><a href="forgot-password.php">Forgot Password?</a></span>
+										<span class="remember"><input type="checkbox" name="remember" id="remember" /><label for="remember"> Remember Me</label></span>
+										<span class="forgot"><a href="forgot-password.php">Forgot Password?</a></span>
 									</li>
 									<li id="bottom">
-										<span style="display: inline-block;"><input type="checkbox" name="remember" id="remember" /><label for="remember"> Remember Me</label></span>
-										<span><input type="submit" name="submit" id="submit" /></span>
+										<div class="social">
+											<?php if (FBLOGIN_ENABLED == true && defined('FBLOGIN_APPID') && defined('FBLOGIN_APPSECRET')) : ?><a href="<?php echo $fb_login_url; ?>"><img src="images/facebook.png" width="61" height="61" alt="Facebook login" /></a><?php endif; ?>
+										</div>
+										<div><input type="submit" name="submit" id="submit" /></div>
 									</li>
 								</ul>
 							</form>
@@ -298,23 +313,6 @@
 					</div>
 				</div>
 			</div>
-		</div>
-		<div id="signinbox">
-			<form action="login.php" method="post">
-				<input type="hidden" name="token" value="<?php echo $csrf_token; ?>" />
-				<input type="hidden" name="action" value="login" />
-				<ul>
-					<li><input type="text" name="username" id="username" placeholder="Email" value="<?php echo $email_signin_default ?>" /></li>
-					<li>
-						<input type="password" name="password" id="password" placeholder="Password" value="" />
-						<span><a href="forgot-password.php">Forgot Password?</a></span>
-					</li>
-					<li id="bottom">
-						<span style="display: inline-block;"><input type="checkbox" name="remember" id="remember" /><label for="remember"> Remember Me</label></span>
-						<span><input type="submit" name="submit" id="submit" /></span>
-					</li>
-				</ul>
-			</form>
 		</div>
 		<div id="registerbox">
 			<form action="login.php" method="post">
@@ -398,7 +396,12 @@
 				<ul style="margin-left: 65px">
 					<li class="email"><input type="text" name="email" id="email" value="<?php echo $email_register_default ?>" /><label for="email">E-mail</label></li>
 					<li class="password"><input type="password" name="password" id="password" value="" /><label for="password">Password</label></li>
-					<li class="submit"><input type="submit" name="submit" id="submit" /></li>
+					<li class="submit">
+						<div class="social">
+							<?php if (FBLOGIN_ENABLED == true && defined('FBLOGIN_APPID') && defined('FBLOGIN_APPSECRET')) : ?><a href="<?php echo $fb_login_url; ?>"><img src="images/facebook.png" width="61" height="61" alt="Facebook login" /></a><?php endif; ?>
+						</div>
+						<input type="submit" name="submit" id="submit" />
+					</li>
 				</ul>
 			</form>
 		</div>
@@ -421,13 +424,16 @@
 						<input type="hidden" name="action" value="login" />
 						<ul>
 							<li><input type="text" name="username" id="username" placeholder="Email" value="<?php echo $email_signin_default ?>" /></li>
+							<li><input type="password" name="password" id="password" placeholder="Password" value="" /></li>
 							<li>
-								<input type="password" name="password" id="password" placeholder="Password" value="" />
-								<span><a href="forgot-password.php">Forgot Password?</a></span>
+								<span class="remember"><input type="checkbox" name="remember" id="remember-page" /><label for="remember-page"> Remember Me</label></span>
+								<span class="forgot"><a href="forgot-password.php">Forgot Password?</a></span>
 							</li>
 							<li id="bottom">
-								<span style="display: inline-block;"><input type="checkbox" name="remember" id="remember-page" /><label for="remember-page"> Remember Me</label></span>
-								<span><input type="submit" name="submit" id="submit" /></span>
+								<div class="social">
+									<?php if (FBLOGIN_ENABLED == true && defined('FBLOGIN_APPID') && defined('FBLOGIN_APPSECRET')) : ?><a href="<?php echo $fb_login_url; ?>"><img src="images/facebook.png" width="61" height="61" alt="Facebook login" /></a><?php endif; ?>
+								</div>
+								<div><input type="submit" name="submit" id="submit" /></div>
 							</li>
 						</ul>
 					</form>

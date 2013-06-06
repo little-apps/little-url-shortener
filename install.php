@@ -33,6 +33,11 @@
 			'shorturl-length' => ( defined('SITE_SHORTURLLENGTH') ? SITE_SHORTURLLENGTH : '7' ),
 			'validate-ip' => ( defined('SITE_VALIDATEIP') ? SITE_VALIDATEIP : true ),
 		),
+		'facebook' => array(
+			'enabled' => ( defined('FBLOGIN_ENABLED') ? FBLOGIN_ENABLED : false ),
+			'appid' => ( defined('FBLOGIN_APPID') ? FBLOGIN_APPID : '' ),
+			'appsecret' => ( defined('FBLOGIN_APPSECRET') ? FBLOGIN_APPSECRET : '' ),
+		),
 		'mail' => array(
 			'mailer' => ( defined('MAIL_MAILER') ? MAIL_MAILER : 'mail' ),
 			'smtp-server' => ( defined('SMTP_HOST') ? SMTP_HOST : 'localhost' ),
@@ -93,6 +98,11 @@
 		
 		if (!isset($site_options['url']) || !isset($site_options['ssl-url']) || !isset($site_options['name']) || !isset($site_options['noreply-email']) || !isset($site_options['admin-email']) || !isset($site_options['shorturl-length'])) {
 			$messages[] = 'One or more of the site settings is missing.';
+		}
+		
+		$facebook_options = $_POST['facebook'];
+		if (!isset($facebook_options['appid']) || !isset($facebook_options['appsecret'])) {
+			$messages[] = 'Facebook settings are missing.';
 		}
 
 		$mail_options = $_POST['mail'];
@@ -156,6 +166,20 @@
 				$site_options['validate-ip'] = false;
 			else
 				$site_options['validate-ip'] = true;
+				
+			// Validate Facebook settings
+			if (!isset($facebook_options['enabled'])) {
+				$facebook_options['enabled'] = false;
+			} else {
+				$facebook_options['enabled'] = true;
+				
+				$facebook_options['appid'] = trim($facebook_options['appid']);
+				$facebook_options['appsecret'] = trim($facebook_options['appsecret']);
+				
+				if (empty($facebook_options['appid']) || empty($facebook_options['appid'])) {
+					$messages[] = "Facebook App ID and App Secret cannot be empty.";
+				}
+			}
 				
 			// Validate mail settings
 			if ($mail_options['mailer'] != 'mail' && $mail_options['mailer'] != 'smtp' && $mail_options['mailer'] != 'sendmail') {
@@ -258,6 +282,11 @@ define('SITE_ADMINEMAIL', '{$site_options['admin-email']}');
 define('SITE_SHORTURLLENGTH', {$site_options['shorturl-length']});
 define('SITE_VALIDATEIP', {$site_options['validate-ip']}); // If true, sessions are locked to one IP address
 
+// Facebook login
+define('FBLOGIN_ENABLED', {$facebook_options['enabled']}); // Set to true to allow Facebook login
+define('FBLOGIN_APPID', '{$facebook_options['appid']}'); // Facebook App ID
+define('FBLOGIN_APPSECRET', '{$facebook_options['appsecret']}'); // Facebook App Secret
+
 // Mailer to use (Can be mail, smtp, or sendmail)
 // If using SMTP, or sendmail be sure to configure it properly below
 define('MAIL_MAILER', '{$mail_options['mailer']}');
@@ -323,7 +352,7 @@ SQL;
 			}
 		}
 		
-		$default_values = array_merge($default_values, array('site' => $site_options, 'mail' => $mail_options, 'mysql' => $mysql_options));
+		$default_values = array_merge($default_values, array('site' => $site_options, 'facebook' => $facebook_options, 'mail' => $mail_options, 'mysql' => $mysql_options));
 	}
 ?>
 <html>
@@ -429,13 +458,13 @@ SQL;
 				margin: 10px auto;
 				clear: both;
 				height: 23px; 
-				width: 400px; 
+				width: 448px; 
 			}
 			
 			.main > form > div > ul li > label {
 				display: block;
 				float: left;
-				width: 132px;
+				width: 182px;
 				text-align: right;
 				padding-right: 10px;
 			}
@@ -514,6 +543,14 @@ SQL;
 						<li><label for="admin-email">Admin Email: </label><input type="text" name="site[admin-email]" id="admin-email" value="<?php echo $default_values['site']['admin-email'] ?>" /></li>
 						<li><label for="shorturl-length">Short URL Length: </label><input type="text" name="site[shorturl-length]" id="shorturl-length" style="width: 50px" value="<?php echo $default_values['site']['shorturl-length'] ?>" /></li>
 						<li><label for="validate-ip">Validate IP?</label><input type="checkbox" name="site[validate-ip]" id="validate-ip" <?php echo ( $default_values['site']['url'] == true ? 'checked' : '' ) ?> /></li>
+					</ul>
+				</div>
+				<div class="facebook">
+					<p>Facebook Configuration</p>
+					<ul>
+						<li><label for="facebook-enabled">Enable Facebook Login?</label><input type="checkbox" name="facebook[enabled]" id="facebook-enabled" <?php echo ( $default_values['facebook']['enabled'] == true ? 'checked' : '' ) ?> /></li>
+						<li><label for="facebook-appid">App ID: </label><input type="text" name="facebook[appid]" id="facebook-appid" value="<?php echo $default_values['facebook']['appid'] ?>" /></li>
+						<li><label for="facebook-appsecret">App Secret: </label><input type="text" name="facebook[appsecret]" id="facebook-appsecret" value="<?php echo $default_values['facebook']['appsecret'] ?>" /></li>
 					</ul>
 				</div>
 				<div class="mail">

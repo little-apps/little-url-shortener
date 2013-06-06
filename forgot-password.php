@@ -186,13 +186,16 @@
 								<input type="hidden" name="token" value="<?php echo $csrf_token; ?>" />
 								<ul>
 									<li><input type="text" name="username" id="username" placeholder="Email" value="" /></li>
+									<li><input type="password" name="password" id="password" placeholder="Password" value="" /></li>
 									<li>
-										<input type="password" name="password" id="password" placeholder="Password" value="" />
-										<span><a href="forgot-password.php">Forgot Password?</a></span>
+										<span class="remember"><input type="checkbox" name="remember" id="remember" /><label for="remember"> Remember Me</label></span>
+										<span class="forgot"><a href="forgot-password.php">Forgot Password?</a></span>
 									</li>
 									<li id="bottom">
-										<span style="display: inline-block;"><input type="checkbox" name="remember" id="remember" /><label for="remember"> Remember Me</label></span>
-										<span><input type="submit" name="submit" id="submit" /></span>
+										<div class="social">
+											<?php if (FBLOGIN_ENABLED == true && defined('FBLOGIN_APPID') && defined('FBLOGIN_APPSECRET')) : ?><a href="<?php echo $fb_login_url; ?>"><img src="images/facebook.png" width="61" height="61" alt="Facebook login" /></a><?php endif; ?>
+										</div>
+										<div><input type="submit" name="submit" id="submit" /></div>
 									</li>
 								</ul>
 							</form>
@@ -300,7 +303,12 @@
 				<ul style="margin-left: 65px">
 					<li class="email"><input type="text" name="email" id="email" value="" /><label for="email">E-mail</label></li>
 					<li class="password"><input type="password" name="password" id="password" value="" /><label for="password">Password</label></li>
-					<li class="submit"><input type="submit" name="submit" id="submit" /></li>
+					<li class="submit">
+						<div class="social">
+							<?php if (FBLOGIN_ENABLED == true && defined('FBLOGIN_APPID') && defined('FBLOGIN_APPSECRET')) : ?><a href="<?php echo $fb_login_url; ?>"><img src="images/facebook.png" width="61" height="61" alt="Facebook login" /></a><?php endif; ?>
+						</div>
+						<input type="submit" name="submit" id="submit" />
+					</li>
 				</ul>
 			</form>
 		</div>
