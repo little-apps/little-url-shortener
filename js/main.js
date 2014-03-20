@@ -168,7 +168,7 @@ jQuery(document).ready(function($) {
 			$(this).select();
 		});
 		
-		$(".popup > .inner > .content > a").zclip({ path:'js/ZeroClipboard.swf',copy:function(){return $(".popup > .inner > .content > a > #link").val();}});
+		$(".popup > .inner > .content > a#short-url").zclip({ path:'js/ZeroClipboard.swf',copy:function(){return $(".popup > .inner > .content > a > #link").val();}});
 		
 		$(".popup > .inner > .content > #closeModal").click(function() {
 			$(".popup").slideUp();

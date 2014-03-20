@@ -57,7 +57,7 @@ function output_short_url() {
 				<div class="content">
 					<a href="#" id="closeModal"><img src="images/modal_close.png"/></a>
 					<p>Generated URL</p>
-					<a href="#"><input id="link" value="<?php echo $_SESSION['short_url'] ?>" readonly /></a>
+					<a href="#" id="short-url"><input id="link" value="<?php echo $_SESSION['short_url'] ?>" readonly /></a>
 					<img src="inc/qrcode.php?token=<?php echo $_SESSION['image_token'] ?>" width="256" height="256" alt="QR Code" id="qrcode" />
 					<div id="share">
 						<button id="facebook" onclick="javascript: window.open('http://www.facebook.com/sharer.php?u=<?php echo urlencode($_SESSION['short_url']) ?>', '_blank');">Share</button>

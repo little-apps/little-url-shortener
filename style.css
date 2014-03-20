@@ -1214,13 +1214,20 @@ table {
 	font: 700 20px 'Montserrat', sans-serif;
 	padding-bottom: 15px;
 }
-.popup > .inner > .content > a > #link {
+
+.popup > .inner > .content > a#short-url {
+	display: block; 
+	margin: 0 auto;
+	width: 836px; 
+}
+
+.popup > .inner > .content > a#short-url > #link {
 	cursor: pointer;
 	text-align: center;
 	height: 61px; 
 	width: 836px; 
 	background: url("images/clip-icon.png") no-repeat scroll right center #fff;
-	padding: 0px 23px;
+	padding: 0px 0px 0px 23px;
 	color: #000;
 	border: solid 1px rgba(255,255,255,.05);
 	font: 20px 'Montserrat', sans-serif;
