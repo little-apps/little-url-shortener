@@ -264,7 +264,7 @@
 			
 		</div>
 		<div id="footer">
-			<div id="copyright">Copyright &copy; 2013 <a href="http://www.little-apps.org" target="_blank">Little Apps</a>. All rights reserved.</div>
+			<div id="copyright"><a href="https://github.com/little-apps/little-url-shortener" target="_blank">Little URL Shortener</a> was developed by <a href="http://www.little-apps.com" target="_blank">Little Apps</a> and is licensed under the <a href="http://www.gnu.org/licenses/gpl.html" target="_blank">GNU GPLv3</a>.</div>
 			<div id="navigation"><a href="index.php">Home</a> | <a href="account.php">Account</a> | <a href="api-docs.php">API Documentation</a> | <a href="contact.php">Contact</a></div>
 		</div>
 	</body>
