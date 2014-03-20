@@ -22,7 +22,7 @@
 	require_once('inc/main.php');
 	
 	if ((isset($_GET['code'])) && $_GET['code'] != '') {
-		$code = $_GET['code'];
+		$code = ltrim($_GET['code'], '/');
 		
 		if (strlen($code) != SITE_SHORTURLLENGTH) {
 			$messages[] = 'URL code is not the right length';
