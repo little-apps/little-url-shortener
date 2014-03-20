@@ -28,8 +28,7 @@
 	}
 	
 	if ($logged_in == false) {
-		header('Location: login.php');
-		die();
+		redirect('login.php');
 	}
 	
 	$success_messages = array();
@@ -48,8 +47,7 @@
 	$stmt->bind_result($first_name, $last_name, $user_email, $pass_hash, $api_key);
 
 	if ($stmt->fetch() !== true) {
-		header('Location: login.php');
-		die();
+		redirect('login.php');
 	}
 	
 	$stmt->close();

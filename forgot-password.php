@@ -24,8 +24,7 @@
 	
 	if ($logged_in == true) {
 		// No need for forgot password, redirect to account
-		header('Location: account.php');
-		die();
+		redirect('account.php');
 	}
 
 	$show_reset_form = false;
@@ -126,8 +125,7 @@
 					session_destroy();
 					
 					// Redirect to login
-					header('Location: login.php');
-					die();
+					redirect('login.php');
 				}
 			}
 		}

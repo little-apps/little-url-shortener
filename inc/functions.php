@@ -90,6 +90,36 @@ function output_errors() {
 	endif;
 }
 
+function redirect($url, $status_code = 301) {
+	if (!is_numeric($status_code))
+		$status_code = 301;
+		
+	if (is_string($status_code))
+		$status_code = intval($status_code);
+		
+	if (headers_sent()) {
+		// Prevent HTML from breaking
+		$url = htmlspecialchars( $url );
+		
+		echo '<script type="text/javascript">';
+        echo 'window.location.href="'.$url.'";';
+        echo '</script>';
+        echo '<noscript>';
+        echo '<meta http-equiv="refresh" content="0;url='.$url.'" />';
+        echo '</noscript>';
+	} else {	
+		if (!function_exists('http_response_code')) {
+			// If PHP version is less than 5.4
+			header('Location: '.$url, true, $status_code);
+		} else {
+			http_response_code($status_code);
+			header('Location: '.$url);
+		}
+	}
+	
+	die();
+}
+
 function title($page) {
 	echo SITE_NAME . ' | ' . $page;
 }

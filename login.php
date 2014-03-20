@@ -23,8 +23,7 @@
 	require_once('inc/passhash.class.php');
 	
 	if ($logged_in == true && $_GET['action'] != 'logout') {
-		header('Location: account.php');
-		die();
+		redirect('account.php');
 	}
 	
 	$first_name_register_default = '';
@@ -248,8 +247,7 @@
 							setcookie( "7LSNETHASH", $_SESSION['user_hash'], time() + 60 * 60 * 24 * 365 );
 						}
 						
-						header('Location: account.php');
-						die();
+						redirect('account.php');
 					} else {
 						$messages[] = 'Password is invalid';
 					}

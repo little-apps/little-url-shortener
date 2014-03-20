@@ -48,8 +48,7 @@
 				$stmt->close();
 				
 				// Redirect
-				header('Location: '.$url_long);
-				die();
+				redirect($url_long);
 			}
 		}
 	}
