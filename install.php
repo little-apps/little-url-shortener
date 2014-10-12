@@ -94,6 +94,13 @@
 	}
 	
 	if (count($messages) == 0 && ($_SERVER['REQUEST_METHOD'] && $_SERVER['REQUEST_METHOD'] == 'POST')) {
+		// If magic quotes enabled => remove slashes
+		if (get_magic_quotes_gpc()) {
+			foreach ($_POST as $k => $v) {
+				$_POST[$k] = stripslashes($v);
+			}
+		}
+	
 		$site_options = $_POST['site'];
 		
 		if (!isset($site_options['url']) || !isset($site_options['ssl-url']) || !isset($site_options['name']) || !isset($site_options['noreply-email']) || !isset($site_options['admin-email']) || !isset($site_options['shorturl-length'])) {
@@ -269,6 +276,16 @@
 			}
 			
 			if (count($messages) == 0) {
+				// Escape options so config.php doesn't break
+				function escape_value(&$val) {
+					$val = str_replace("'", "\'", $val);
+				}
+				
+				array_walk($site_options, 'escape_value');
+				array_walk($facebook_options, 'escape_value');
+				array_walk($mail_options, 'escape_value');
+				array_walk($mysql_options, 'escape_value');
+			
 				// We are go for installation!
 				
 				$config_text = <<<PHP
