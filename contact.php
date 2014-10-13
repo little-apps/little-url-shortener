@@ -69,7 +69,7 @@
 			$text .= "If you would like to reply, simply reply to this e-mail." . PHP_EOL . PHP_EOL;
 			$text .= "IP address: " . $_SERVER['REMOTE_ADDR'] . PHP_EOL;
 			
-			send_email(SITE_ADMINEMAIL, '', $email, $name, $subject, $message);
+			send_email(SITE_ADMINEMAIL, '', $email, $name, $subject, $text);
 			
 			// Clear variables
 			if ($logged_in == false) {
