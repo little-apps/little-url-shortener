@@ -68,11 +68,6 @@
 		$messages[] = 'PHP extension GD is not installed.';
 	}
 	
-	// Make sure Hash is installed
-	if (!extension_loaded('hash')) {
-		$messages[] = 'PHP extension Hash is not installed.';
-	}
-	
 	// Make sure Session is installed
 	if (!extension_loaded('session')) {
 		$messages[] = 'PHP extension Session is not installed.';
