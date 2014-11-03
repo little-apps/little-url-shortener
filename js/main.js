@@ -186,17 +186,19 @@ jQuery(document).ready(function($) {
 	// Update statistics
 	if ($(".stats").length > 0) {
 		function refreshStats() {
-			$.getJSON('inc/stats.php', function(data) {
-				$.each(data, function(index, value) {
-					if (index == 'urls') {
-						$(".stats > .boxes > .box > .number#urls-count").html(value);
-					} else if (index == 'visits') {
-						$(".stats > .boxes > .box > .number#visits-count").html(value);
-					} else if (index == 'users') {
-						$(".stats > .boxes > .box > .number#users-count").html(value);
-					}
+			if (!$("body").hasClass("hidden")) {
+				$.getJSON('inc/stats.php', function(data) {
+					$.each(data, function(index, value) {
+						if (index == 'urls') {
+							$(".stats > .boxes > .box > .number#urls-count").html(value);
+						} else if (index == 'visits') {
+							$(".stats > .boxes > .box > .number#visits-count").html(value);
+						} else if (index == 'users') {
+							$(".stats > .boxes > .box > .number#users-count").html(value);
+						}
+					});
 				});
-			});
+			}
 		}
 		
 		refreshStats();
@@ -206,3 +208,6 @@ jQuery(document).ready(function($) {
 
 /* Select text */
 jQuery.fn.selectText=function(){var d=document,b=this[0],a,c;if(d.body.createTextRange){a=document.body.createTextRange();a.moveToElementText(b);a.select()}else{if(window.getSelection){c=window.getSelection();a=document.createRange();a.selectNodeContents(b);c.removeAllRanges();c.addRange(a)}}};
+
+/* Detect if window/tab is active */
+(function(){var hidden="hidden";if(hidden in document){document.addEventListener("visibilitychange",onchange)}else{if((hidden="mozHidden") in document){document.addEventListener("mozvisibilitychange",onchange)}else{if((hidden="webkitHidden") in document){document.addEventListener("webkitvisibilitychange",onchange)}else{if((hidden="msHidden") in document){document.addEventListener("msvisibilitychange",onchange)}else{if("onfocusin" in document){document.onfocusin=document.onfocusout=onchange}else{window.onpageshow=window.onpagehide=window.onfocus=window.onblur=onchange}}}}}function onchange(evt){var v="visible",h="hidden",evtMap={focus:v,focusin:v,pageshow:v,blur:h,focusout:h,pagehide:h};evt=evt||window.event;if(evt.type in evtMap){document.body.className=evtMap[evt.type]}else{document.body.className=this[hidden]?"hidden":"visible"}}})();
