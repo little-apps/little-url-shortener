@@ -594,7 +594,7 @@ SQL;
 						<li><label for="noreply-email">No Reply Email: </label><input type="text" name="site[noreply-email]" id="noreply" value="<?php echo $default_values['site']['noreply-email'] ?>" /></li>
 						<li><label for="admin-email">Admin Email: </label><input type="text" name="site[admin-email]" id="admin-email" value="<?php echo $default_values['site']['admin-email'] ?>" /></li>
 						<li><label for="shorturl-length">Short URL Length: </label><input type="text" name="site[shorturl-length]" id="shorturl-length" style="width: 50px" value="<?php echo $default_values['site']['shorturl-length'] ?>" /></li>
-						<li><label for="validate-ip">Validate IP?</label><input type="checkbox" name="site[validate-ip]" id="validate-ip" <?php echo ( $default_values['site']['url'] == true ? 'checked' : '' ) ?> /></li>
+						<li><label for="validate-ip">Validate IP?</label><input type="checkbox" name="site[validate-ip]" id="validate-ip" <?php echo ( $default_values['site']['validate-ip'] == true ? 'checked' : '' ) ?> /></li>
 						<li><label for="validate-ip">Use Google Analytics?</label><input type="checkbox" name="site[ganalytics]" id="ganalytics" <?php echo ( $default_values['site']['ganalytics'] == true ? 'checked' : '' ) ?> /></li>
 						<li><label for="name">Google Analytics Tracking ID: </label><input type="text" name="site[ganalytics-tracking]" id="ganalytics-tracking" value="<?php echo $default_values['site']['ganalytics-tracking'] ?>" /></li>
 						
