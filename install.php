@@ -184,6 +184,14 @@
 			else
 				$site_options['validate-ip'] = true;
 				
+			if (!isset($site_options['ganalytics']))
+				$site_options['ganalytics'] = false;
+			else
+				$site_options['ganalytics'] = true;
+				
+			if ($site_options['ganalytics'] && trim($site_options['ganalytics-tracking']) == '')
+				$messages[] = "Google Analytics cannot be enabled and the tracking ID be empty.";
+				
 			// Validate Facebook settings
 			if (!isset($facebook_options['enabled'])) {
 				$facebook_options['enabled'] = false;
@@ -286,64 +294,78 @@
 			}
 			
 			if (count($messages) == 0) {
-				// Escape options so config.php doesn't break
-				function escape_value(&$val) {
-					$val = str_replace("'", "\'", $val);
+				function prepare_value(&$val) {
+					// Escape options that are strings so config.php doesn't break
+					if (is_string($val)) {
+						$val = str_replace("'", "\'", $val);
+					} elseif (is_bool($val)) {
+						if ($val === false)
+							$val = 'false';
+						else
+							$val = 'true';
+					} else {
+						$val = strval($val);
+					}
 				}
 				
-				array_walk($site_options, 'escape_value');
-				array_walk($facebook_options, 'escape_value');
-				array_walk($mail_options, 'escape_value');
-				array_walk($mysql_options, 'escape_value');
-			
+				$site_options_strings = $site_options;
+				$facebook_options_strings = $facebook_options;
+				$mail_options_strings = $mail_options;
+				$mysql_options_strings = $mysql_options;
+				
+				array_walk($site_options_strings, 'prepare_value');
+				array_walk($facebook_options_strings, 'prepare_value');
+				array_walk($mail_options_strings, 'prepare_value');
+				array_walk($mysql_options_strings, 'prepare_value');
+
 				// We are go for installation!
 				
 				$config_text = <<<PHP
 <?php
 // Website config
-define('SITE_URL', '{$site_options['url']}');
-define('SITE_SSLURL', '{$site_options['ssl-url']}');
-define('SITE_NAME', '{$site_options['name']}');
-define('SITE_NOREPLY', '{$site_options['noreply-email']}');
-define('SITE_ADMINEMAIL', '{$site_options['admin-email']}');
-define('SITE_SHORTURLLENGTH', {$site_options['shorturl-length']});
-define('SITE_VALIDATEIP', {$site_options['validate-ip']}); // If true, sessions are locked to one IP address
+define('SITE_URL', '{$site_options_strings['url']}');
+define('SITE_SSLURL', '{$site_options_strings['ssl-url']}');
+define('SITE_NAME', '{$site_options_strings['name']}');
+define('SITE_NOREPLY', '{$site_options_strings['noreply-email']}');
+define('SITE_ADMINEMAIL', '{$site_options_strings['admin-email']}');
+define('SITE_SHORTURLLENGTH', {$site_options_strings['shorturl-length']});
+define('SITE_VALIDATEIP', {$site_options_strings['validate-ip']}); // If true, sessions are locked to one IP address
 
-define('SITE_GANALYTICS', {$site_options['ganalytics']}); // Set to true to enable Google Analytics tracking
-define('SITE_GANALYTICS_ID', '{$site_options['ganalytics-tracking']}'); // Google Analytics tracking ID (usually something like UA-12345678-12)
+define('SITE_GANALYTICS', {$site_options_strings['ganalytics']}); // Set to true to enable Google Analytics tracking
+define('SITE_GANALYTICS_ID', '{$site_options_strings['ganalytics-tracking']}'); // Google Analytics tracking ID (usually something like UA-12345678-12)
 
 // Facebook login
-define('FBLOGIN_ENABLED', {$facebook_options['enabled']}); // Set to true to allow Facebook login
-define('FBLOGIN_APPID', '{$facebook_options['appid']}'); // Facebook App ID
-define('FBLOGIN_APPSECRET', '{$facebook_options['appsecret']}'); // Facebook App Secret
+define('FBLOGIN_ENABLED', {$facebook_options_strings['enabled']}); // Set to true to allow Facebook login
+define('FBLOGIN_APPID', '{$facebook_options_strings['appid']}'); // Facebook App ID
+define('FBLOGIN_APPSECRET', '{$facebook_options_strings['appsecret']}'); // Facebook App Secret
 
 // Mailer to use (Can be mail, smtp, or sendmail)
 // If using SMTP, or sendmail be sure to configure it properly below
-define('MAIL_MAILER', '{$mail_options['mailer']}');
+define('MAIL_MAILER', '{$mail_options_strings['mailer']}');
 
 // SMTP server info
-define('SMTP_HOST', '{$mail_options['smtp-server']}');
-define('SMTP_PORT', {$mail_options['smtp-port']});
-define('SMTP_SECURE', '{$mail_options['smtp-security']}'); // Can be ssl, tls or blank for none
-define('SMTP_USER', '{$mail_options['smtp-user']}');
-define('SMTP_PASS', '{$mail_options['smtp-password']}');
+define('SMTP_HOST', '{$mail_options_strings['smtp-server']}');
+define('SMTP_PORT', {$mail_options_strings['smtp-port']});
+define('SMTP_SECURE', '{$mail_options_strings['smtp-security']}'); // Can be ssl, tls or blank for none
+define('SMTP_USER', '{$mail_options_strings['smtp-user']}');
+define('SMTP_PASS', '{$mail_options_strings['smtp-password']}');
 
 // Sendmail path
-define('SENDMAIL_PATH', '{$mail_options['sendmail-path']}');
+define('SENDMAIL_PATH', '{$mail_options_strings['sendmail-path']}');
 
 // MySQL config
-define('MYSQL_HOST', '{$mysql_options['mysql-host']}');
-define('MYSQL_USER', '{$mysql_options['mysql-user']}');
-define('MYSQL_PASS', '{$mysql_options['mysql-pass']}');
-define('MYSQL_DB', '{$mysql_options['mysql-database']}');
-define('MYSQL_PREFIX', '{$mysql_options['mysql-table-prefix']}');
+define('MYSQL_HOST', '{$mysql_options_strings['mysql-host']}');
+define('MYSQL_USER', '{$mysql_options_strings['mysql-user']}');
+define('MYSQL_PASS', '{$mysql_options_strings['mysql-pass']}');
+define('MYSQL_DB', '{$mysql_options_strings['mysql-database']}');
+define('MYSQL_PREFIX', '{$mysql_options_strings['mysql-table-prefix']}');
 PHP;
 
 				if (file_put_contents('inc/config.php', $config_text) === false) {
 					$messages[] = 'Error writing to "inc/config.php".';
 				} else {
 					$sql = <<<SQL
-CREATE TABLE IF NOT EXISTS `{$mysql_options['mysql-table-prefix']}urls` (
+CREATE TABLE IF NOT EXISTS `{$mysql_options_strings['mysql-table-prefix']}urls` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `short_url` varchar(8) NOT NULL,
   `long_url` text NOT NULL,
@@ -353,7 +375,7 @@ CREATE TABLE IF NOT EXISTS `{$mysql_options['mysql-table-prefix']}urls` (
   KEY `id` (`id`)
 );
 
-CREATE TABLE IF NOT EXISTS `{$mysql_options['mysql-table-prefix']}users` (
+CREATE TABLE IF NOT EXISTS `{$mysql_options_strings['mysql-table-prefix']}users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `first_name` varchar(255) NOT NULL,
   `last_name` varchar(255) NOT NULL,
