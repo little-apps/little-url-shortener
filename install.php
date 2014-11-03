@@ -32,6 +32,8 @@
 			'admin-email' => ( defined('SITE_ADMINEMAIL') ? SITE_ADMINEMAIL : 'webmaster@' . $_SERVER['SERVER_NAME'] ),
 			'shorturl-length' => ( defined('SITE_SHORTURLLENGTH') ? SITE_SHORTURLLENGTH : '7' ),
 			'validate-ip' => ( defined('SITE_VALIDATEIP') ? SITE_VALIDATEIP : true ),
+			'ganalytics' => ( defined('SITE_GANALYTICS') ? SITE_GANALYTICS : false ),
+			'ganalytics-tracking' => ( defined('SITE_GANALYTICS_ID') ? SITE_GANALYTICS_ID : '' ),
 		),
 		'facebook' => array(
 			'enabled' => ( defined('FBLOGIN_ENABLED') ? FBLOGIN_ENABLED : false ),
@@ -98,7 +100,12 @@
 	
 		$site_options = $_POST['site'];
 		
-		if (!isset($site_options['url']) || !isset($site_options['ssl-url']) || !isset($site_options['name']) || !isset($site_options['noreply-email']) || !isset($site_options['admin-email']) || !isset($site_options['shorturl-length'])) {
+		if (!isset($site_options['url']) 
+			|| !isset($site_options['ssl-url']) 
+			|| !isset($site_options['name']) 
+			|| !isset($site_options['noreply-email']) 
+			|| !isset($site_options['admin-email']) 
+			|| !isset($site_options['shorturl-length'])) {
 			$messages[] = 'One or more of the site settings is missing.';
 		}
 		
@@ -113,7 +120,11 @@
 			$messages[] = "Mail method is missing.";
 		} else {
 			if ($mail_options['mailer'] == 'smtp') {
-				if (!isset($mail_options['smtp-server']) || !isset($mail_options['smtp-port']) || !isset($mail_options['smtp-security']) || !isset($mail_options['smtp-user']) || !isset($mail_options['smtp-password'])) {
+				if (!isset($mail_options['smtp-server']) 
+					|| !isset($mail_options['smtp-port']) 
+					|| !isset($mail_options['smtp-security']) 
+					|| !isset($mail_options['smtp-user']) 
+					|| !isset($mail_options['smtp-password'])) {
 					$messages[] = "One or more of the SMTP settings is missing.";
 				}
 			} else if ($mail_options['mailer'] == 'sendmail') {
@@ -125,7 +136,11 @@
 		
 		$mysql_options = $_POST['mysql'];
 		
-		if (!isset($mysql_options['mysql-host']) || !isset($mysql_options['mysql-user']) || !isset($mysql_options['mysql-pass']) || !isset($mysql_options['mysql-database']) || !isset($mysql_options['mysql-table-prefix'])) {
+		if (!isset($mysql_options['mysql-host']) 
+			|| !isset($mysql_options['mysql-user']) 
+			|| !isset($mysql_options['mysql-pass']) 
+			|| !isset($mysql_options['mysql-database']) 
+			|| !isset($mysql_options['mysql-table-prefix'])) {
 			$messages[] = "One or more mysql setting is missing.";
 		}
 		
@@ -293,6 +308,9 @@ define('SITE_NOREPLY', '{$site_options['noreply-email']}');
 define('SITE_ADMINEMAIL', '{$site_options['admin-email']}');
 define('SITE_SHORTURLLENGTH', {$site_options['shorturl-length']});
 define('SITE_VALIDATEIP', {$site_options['validate-ip']}); // If true, sessions are locked to one IP address
+
+define('SITE_GANALYTICS', {$site_options['ganalytics']}); // Set to true to enable Google Analytics tracking
+define('SITE_GANALYTICS_ID', '{$site_options['ganalytics-tracking']}'); // Google Analytics tracking ID (usually something like UA-12345678-12)
 
 // Facebook login
 define('FBLOGIN_ENABLED', {$facebook_options['enabled']}); // Set to true to allow Facebook login
@@ -470,13 +488,13 @@ SQL;
 				margin: 10px auto;
 				clear: both;
 				height: 23px; 
-				width: 448px; 
+				width: 480px; 
 			}
 			
 			.main > form > div > ul li > label {
 				display: block;
 				float: left;
-				width: 182px;
+				width: 215px;
 				text-align: right;
 				padding-right: 10px;
 			}
@@ -555,6 +573,9 @@ SQL;
 						<li><label for="admin-email">Admin Email: </label><input type="text" name="site[admin-email]" id="admin-email" value="<?php echo $default_values['site']['admin-email'] ?>" /></li>
 						<li><label for="shorturl-length">Short URL Length: </label><input type="text" name="site[shorturl-length]" id="shorturl-length" style="width: 50px" value="<?php echo $default_values['site']['shorturl-length'] ?>" /></li>
 						<li><label for="validate-ip">Validate IP?</label><input type="checkbox" name="site[validate-ip]" id="validate-ip" <?php echo ( $default_values['site']['url'] == true ? 'checked' : '' ) ?> /></li>
+						<li><label for="validate-ip">Use Google Analytics?</label><input type="checkbox" name="site[ganalytics]" id="ganalytics" <?php echo ( $default_values['site']['ganalytics'] == true ? 'checked' : '' ) ?> /></li>
+						<li><label for="name">Google Analytics Tracking ID: </label><input type="text" name="site[ganalytics-tracking]" id="ganalytics-tracking" value="<?php echo $default_values['site']['ganalytics-tracking'] ?>" /></li>
+						
 					</ul>
 				</div>
 				<div class="facebook">

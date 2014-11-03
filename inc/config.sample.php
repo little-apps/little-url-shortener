@@ -10,6 +10,9 @@ define('SITE_ADMINEMAIL', 'webmaster@example.com');
 define('SITE_SHORTURLLENGTH', 7);
 define('SITE_VALIDATEIP', true); // If true, sessions are locked to one IP address
 
+define('SITE_GANALYTICS', false); // Set to true to enable Google Analytics tracking
+define('SITE_GANALYTICS_ID', ''); // Google Analytics tracking ID (usually something like UA-12345678-12)
+
 // Facebook login
 define('FBLOGIN_ENABLED', false); // Set to true to allow Facebook login
 define('FBLOGIN_APPID', ''); // Facebook App ID

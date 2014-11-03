@@ -66,6 +66,7 @@
 		<script src="js/main.js" type="text/javascript"></script>
 	</head>
 	<body>
+		<?php ganalytics_tracking(); ?>
 		<?php output_errors(); ?>
 		<?php output_short_url(); ?>
 		<div id="topmenu">
