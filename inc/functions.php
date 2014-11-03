@@ -133,7 +133,7 @@ function meta_tags() {
 }
 
 function ganalytics_tracking() {
-	if (SITE_GANALYTICS && !empty(SITE_GANALYTICS_ID)) :
+	if ((defined('SITE_GANALYTICS') && defined('SITE_GANALYTICS_ID')) && SITE_GANALYTICS && strlen(SITE_GANALYTICS_ID) > 0) :
 ?>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
