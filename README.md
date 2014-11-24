@@ -19,8 +19,12 @@ The following is required to run Little URL Shortener properly:
 ### Installation ###
 To install Little URL Shortener, simply navigate to the "install.php" file in your web browser. For example, http://www.mywebsite.com/install.php.
 
-### Facebook Support ###
+#### Facebook Support ####
 For information on how to setup Facebook with Little URL Shortener, please see [this blog post for more details](http://www.little-apps.org/blog/2013/06/using-facebook-little-url-shortener/).
+
+### Example ###
+
+If you would like to see Little URL Shortener in action, please check out [7LS.NET](http://7ls.net). This website is in sync with every update that is pushed to this Git. 
 
 ### Release Notes ###
 * 1.1
