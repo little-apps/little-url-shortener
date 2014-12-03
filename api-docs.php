@@ -48,8 +48,6 @@
 		<link rel="stylesheet" type="text/css" href="style.css" media="screen">
 		<script src="js/jquery.min.js" type="text/javascript"></script>
 		<script src="js/jquery-ui-1.10.2.custom.min.js" type="text/javascript"></script>
-		<script src="js/jquery-scrollto.js" type="text/javascript"></script>
-		
 		<link rel="stylesheet" type="text/css" href="js/highlight/default.css">
 		<script src="js/highlight/highlight.pack.js" type="text/javascript"></script>
 		<script src="js/jquery.zclip.min.js" type="text/javascript"></script>
