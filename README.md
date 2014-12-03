@@ -47,3 +47,6 @@ Little Apps would like to thank the following for helping Little URL Shortener:
  * [PHPQRCode by Dominik D.](http://phpqrcode.sourceforge.net/)
  * [PHPMailer by Jim J.](https://github.com/PHPMailer/PHPMailer/)
  * [Facebook SDK for PHP by Facebook Inc.](https://developers.facebook.com/docs/reference/php/)
+ * [jQuery ZeroClipboard by SteamDev](http://steamdev.com/zclip)
+ * [DataTables by Allan Jardine](http://www.datatables.net)
+ * [highlight.js by Ivan Sagalaev](https://highlightjs.org/)
