@@ -318,12 +318,12 @@
 				<input type="hidden" name="action" value="register" />
 				<!-- left -->
 				<ul>
-					<li class="name"><label for="firstname">First Name</label><input type="text" name="firstname" id="firstname" value="<?php echo $first_name_register_default ?>" /></li>
-					<li class="name"><label for="lastname">Last Name</label><input type="text" name="lastname" id="lastname" value="<?php echo $last_name_register_default ?>" /></li>
+					<li class="name"><label for="firstname">First Name</label><input type="text" name="firstname" id="firstname" value="<?php echo htmlspecialchars($first_name_register_default); ?>" /></li>
+					<li class="name"><label for="lastname">Last Name</label><input type="text" name="lastname" id="lastname" value="<?php echo htmlspecialchars($last_name_register_default); ?>" /></li>
 					<li class="birthdate">
 						<label>Birth Date</label>
 						<div id="day">
-							<input type="text" name="birth[day]" id="day" value="<?php echo $birth_day_register_default ?>" readonly />
+							<input type="text" name="birth[day]" id="day" value="<?php echo htmlspecialchars($birth_day_register_default); ?>" readonly />
 							<div class="combo-day" tabindex="0">
 								<ul>
 									<li>1</li>
@@ -361,7 +361,7 @@
 							</div>
 						</div>
 						<div id="month">
-							<input type="text" name="birth[month]" id="month" value="<?php echo $birth_month_register_default ?>" readonly />
+							<input type="text" name="birth[month]" id="month" value="<?php echo htmlspecialchars($birth_month_register_default); ?>" readonly />
 							<div class="combo-month" tabindex="1">
 								<ul>
 									<li>January</li>
@@ -380,7 +380,7 @@
 							</div>
 						</div>
 						<div id="year">
-							<input type="text" name="birth[year]" id="year" value="<?php echo $birth_year_register_default ?>" readonly />
+							<input type="text" name="birth[year]" id="year" value="<?php echo htmlspecialchars($birth_year_register_default); ?>" readonly />
 							<div class="combo-year" tabindex="2">
 								<ul>
 									<?php for ($i = $min_year; $i <= $max_year; $i++) echo "<li>".$i."</li>" . PHP_EOL; ?>
@@ -392,7 +392,7 @@
 				
 				<!-- right -->
 				<ul style="margin-left: 65px">
-					<li class="email"><input type="text" name="email" id="email" value="<?php echo $email_register_default ?>" /><label for="email">E-mail</label></li>
+					<li class="email"><input type="text" name="email" id="email" value="<?php echo htmlspecialchars($email_register_default); ?>" /><label for="email">E-mail</label></li>
 					<li class="password"><input type="password" name="password" id="password" value="" /><label for="password">Password</label></li>
 					<li class="submit">
 						<div class="social">
@@ -421,7 +421,7 @@
 						<input type="hidden" name="token" value="<?php echo $csrf_token; ?>" />
 						<input type="hidden" name="action" value="login" />
 						<ul>
-							<li><input type="text" name="username" id="username" placeholder="Email" value="<?php echo $email_signin_default ?>" /></li>
+							<li><input type="text" name="username" id="username" placeholder="Email" value="<?php echo htmlspecialchars($email_signin_default); ?>" /></li>
 							<li><input type="password" name="password" id="password" placeholder="Password" value="" /></li>
 							<li>
 								<span class="remember"><input type="checkbox" name="remember" id="remember-page" /><label for="remember-page"> Remember Me</label></span>
