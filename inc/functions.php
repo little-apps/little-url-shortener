@@ -78,7 +78,7 @@ function output_errors() {
 	<div id="message-wrapper">
 			<div id="message">
 				<ul>
-					<li id="closeModal"><a href="#"><img src="images/modal_close.png"/></a></li>
+					<li id="closeModal"><a href="#"><img src="<?php echo ( defined('LUS_ADMINAREA') ? '../images/modal_close.png' : 'images/modal_close.png' ); ?>"/></a></li>
 					<li id="title">Attention! Please correct the errors below and try again.</li>
 					<?php foreach ($messages as $message) : ?>
 						<li><?php echo $message; ?></li>

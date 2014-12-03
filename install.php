@@ -35,6 +35,10 @@
 			'ganalytics' => ( defined('SITE_GANALYTICS') ? SITE_GANALYTICS : false ),
 			'ganalytics-tracking' => ( defined('SITE_GANALYTICS_ID') ? SITE_GANALYTICS_ID : '' ),
 		),
+		'admin' => array(
+			'username' => '',
+			'password' => '',
+		),
 		'facebook' => array(
 			'enabled' => ( defined('FBLOGIN_ENABLED') ? FBLOGIN_ENABLED : false ),
 			'appid' => ( defined('FBLOGIN_APPID') ? FBLOGIN_APPID : '' ),
@@ -90,6 +94,11 @@
 		$messages[] = 'The file "config.php" in the "inc" directory must be writable.';
 	}
 	
+	// Make sure PassHash class exists
+	if (!file_exists('inc/passhash.class.php')) {
+		$messages[] = 'PassHash class file (inc/passhash.class.php) not found.';
+	}
+	
 	if (count($messages) == 0 && ($_SERVER['REQUEST_METHOD'] && $_SERVER['REQUEST_METHOD'] == 'POST')) {
 		// If magic quotes enabled => remove slashes
 		if (get_magic_quotes_gpc()) {
@@ -107,6 +116,11 @@
 			|| !isset($site_options['admin-email']) 
 			|| !isset($site_options['shorturl-length'])) {
 			$messages[] = 'One or more of the site settings is missing.';
+		}
+		
+		$admin_options = $_POST['admin'];
+		if (!isset($admin_options['username']) || !isset($admin_options['password'])) {
+			$messages[] = 'Admin login is missing.';
 		}
 		
 		$facebook_options = $_POST['facebook'];
@@ -191,6 +205,35 @@
 				
 			if ($site_options['ganalytics'] && trim($site_options['ganalytics-tracking']) == '')
 				$messages[] = "Google Analytics cannot be enabled and the tracking ID be empty.";
+				
+			// Validate admin login
+			$admin_options['username'] = trim(strtolower($admin_options['username']));
+			$admin_options['password'] = trim($admin_options['password']);
+			
+			if (empty($admin_options['username']) || empty($admin_options['password'])) {
+				$messages[] = "Admin login and password cannot be empty.";
+			} else {
+				if (strlen($admin_options['username']) < 3 || strlen($admin_options['username']) > 16)
+					$messages[] = "Admin username must be no less than 3 characters and no greater than 16 characters";
+			
+				if (!preg_match('/^[a-z0-9_-]{3,}$/i', $admin_options['username']))
+					$messages[] = "Admin username can only contain alphanumeric characters as well as hyphens and underscores";
+					
+				// Test password strength
+				if (!preg_match('@[A-Z]@', $admin_options['password']) || !preg_match('@[a-z]@', $admin_options['password']) || !preg_match('@[0-9]@', $admin_options['password'])) {
+					$messages[] = 'Admin password must contain at least one uppercase (A-Z), lowercase (a-z) and number (0-9)';
+				}
+				
+				// Make sure there's no white spaces (ie: tabs, spaces)
+				if (preg_match('/\s+/', $admin_options['password'])) {
+					$messages[] = 'Admin password cannot contain white spaces (spaces, tabs)';
+				}
+				
+				// Make sure password is more than 8 characters
+				if (strlen($admin_options['password']) < 8) {
+					$messages[] = 'Admin password must be at least eight characters long';
+				}
+			}
 				
 			// Validate Facebook settings
 			if (!isset($facebook_options['enabled'])) {
@@ -309,11 +352,13 @@
 				}
 				
 				$site_options_strings = $site_options;
+				$admin_options_strings = $admin_options;
 				$facebook_options_strings = $facebook_options;
 				$mail_options_strings = $mail_options;
 				$mysql_options_strings = $mysql_options;
 				
 				array_walk($site_options_strings, 'prepare_value');
+				array_walk($admin_options_strings, 'prepare_value');
 				array_walk($facebook_options_strings, 'prepare_value');
 				array_walk($mail_options_strings, 'prepare_value');
 				array_walk($mysql_options_strings, 'prepare_value');
@@ -390,11 +435,45 @@ CREATE TABLE IF NOT EXISTS `{$mysql_options_strings['mysql-table-prefix']}users`
   PRIMARY KEY (`email`),
   KEY `id` (`id`)
 );
+
+CREATE TABLE IF NOT EXISTS `{$mysql_options_strings['mysql-table-prefix']}admins` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(83) NOT NULL,
+  PRIMARY KEY (`username`),
+  KEY `id` (`id`)
+);
 SQL;
 					if (mysqli_multi_query($mysqli, $sql) === false) {
 						$messages[] = "Error creating tables in MySQL database.";
 					} else {
-						$success_message = "Little URL Shortener has been installed. Please remove or rename install.php.";
+						// Must be called before any other statements can be executed
+						
+						while(mysqli_next_result($mysqli)) {
+							if($result = mysqli_store_result($mysqli)) {
+								$result->free();
+							}
+
+						}
+					
+						// Hash admin password
+						require_once('inc/passhash.class.php');
+						$admin_pass_hash = PassHash::hash($admin_options['password']);
+						
+						// Add admin to database
+						if ($stmt = mysqli_prepare($mysqli, 'INSERT INTO '.$mysql_options_strings['mysql-table-prefix'].'admins (`username`,`password`) VALUES(?,?)')) {
+							$stmt->bind_param('ss', $admin_options['username'], $admin_pass_hash);
+							
+							if (!$stmt->execute())
+								$messages[] = 'Unable to insert admin user. There was an error executing the statement.';
+								
+							$stmt->close();
+						} else {
+							$messages[] = 'Unable to insert admin user. There was an error preparing the statement. (Error: '.mysqli_error($mysqli).')';
+						}
+					
+						if (empty($messages))
+							$success_message = "Little URL Shortener has been installed. Please remove or rename install.php.";
 					}
 				
 					$mysqli->close();
@@ -404,7 +483,7 @@ SQL;
 			}
 		}
 		
-		$default_values = array_merge($default_values, array('site' => $site_options, 'facebook' => $facebook_options, 'mail' => $mail_options, 'mysql' => $mysql_options));
+		$default_values = array_merge($default_values, array('site' => $site_options, 'admin' => $admin_options, 'facebook' => $facebook_options, 'mail' => $mail_options, 'mysql' => $mysql_options));
 	}
 ?>
 <html>
@@ -521,7 +600,7 @@ SQL;
 				padding-right: 10px;
 			}
 			
-			.main > form > div > ul li > input[type="text"], .main > form > div > ul li > select {
+			.main > form > div > ul li > input[type="text"], .main > form > div > ul li > input[type="password"], .main > form > div > ul li > select {
 				float: left;
 				width: 255px;
 				font: inherit;
@@ -598,6 +677,13 @@ SQL;
 						<li><label for="validate-ip">Use Google Analytics?</label><input type="checkbox" name="site[ganalytics]" id="ganalytics" <?php echo ( $default_values['site']['ganalytics'] == true ? 'checked' : '' ) ?> /></li>
 						<li><label for="name">Google Analytics Tracking ID: </label><input type="text" name="site[ganalytics-tracking]" id="ganalytics-tracking" value="<?php echo $default_values['site']['ganalytics-tracking'] ?>" /></li>
 						
+					</ul>
+				</div>
+				<div class="admin">
+					<p>Admin Configuration</p>
+					<ul>
+						<li><label for="admin-username">Username: </label><input type="text" name="admin[username]" id="admin-username" value="<?php echo $default_values['admin']['username'] ?>" /></li>
+						<li><label for="admin-password">Password: </label><input type="password" name="admin[password]" id="admin-password" value="<?php echo $default_values['admin']['password'] ?>" /></li>
 					</ul>
 				</div>
 				<div class="facebook">

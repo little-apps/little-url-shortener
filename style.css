@@ -597,6 +597,7 @@ table {
 
 #bottom > #signin ul li#bottom #submit:hover, #bottom > #forgotpw ul li#bottom #submit:hover, #bottom > #resetpw ul li#bottom #submit:hover { cursor: pointer; }
 
+
 /* Main content */
 #wrapper { 
 	background-color: #fff;
@@ -742,7 +743,6 @@ table {
 }
 #footer #copyright {
 	float: left;
-	width: 400px
 }
 
 #footer #navigation {
@@ -750,13 +750,13 @@ table {
 }
 
 /* Account URLs */
-#bottom #urls { 
+#bottom #urls, #bottom #users { 
 	width: 959px;
 	margin: 0px auto;
 	padding-bottom: 115px;
 }
 
-#bottom #urls p { 
+#bottom #urls p, #bottom #users p { 
 	text-align: center;
 	font: 700 20px 'Montserrat', sans-serif;
 	margin-top: 15px;
@@ -811,7 +811,7 @@ table {
 	background-color: rgb(31,127,92);
 }
 
-#bottom #urls table {
+#bottom #urls table, #bottom #users table {
 	width: 100%;
 	text-align: center;
 	background-color: #232323;
@@ -824,42 +824,71 @@ table {
 	top: 15px;
 }
 
-#bottom #urls table tr {
+#bottom #urls table tr, #bottom #users table tr {
 	height: 61px;
+	max-height: 61px;
 	line-height: 61px;
 	vertical-align: middle;
 }
-#bottom #urls table thead tr th, #bottom #urls table tbody tr td {
+#bottom #urls table thead tr th, #bottom #urls table tbody tr td,
+#bottom #users table thead tr th, #bottom #users table tbody tr td  {
 	border: solid 1px rgba(255,255,255,.05);
 }
-#bottom #urls table thead tr th:first-child, #bottom #urls table tbody tr td:first-child {
-	width: 61px;
+#bottom #urls table thead tr th:first-child, #bottom #urls table tbody tr td:first-child,
+#bottom #users table thead tr th:first-child, #bottom #users table tbody tr td:first-child {
+	min-width: 61px;
+	max-width: 61px;
 }
-#bottom #urls table tbody tr td:first-child {
+#bottom #urls table tbody tr td:first-child,#bottom #users table tbody tr td:first-child {
 	cursor: pointer;
 }
 
-#bottom #urls table tbody tr td#off {
+#bottom table tbody tr td > a {
+	color: #fff;
+	text-decoration: underline;
+	white-space: no-wrap;
+}
+
+#bottom table tbody tr td.padding {
+	padding-left: 10px; 
+	padding-right: 10px;
+}
+
+#bottom #urls table tbody tr td#off,#bottom #users table tbody tr td#off  {
 	background: url(images/check-off.png) no-repeat center;
 }
 
-#bottom #urls table tbody tr td#on {
+#bottom #urls table tbody tr td#on,#bottom #users table tbody tr td#on  {
 	background: rgb(31,127,92) url(images/check-on.png) no-repeat center;
 }
 
-#bottom #urls table thead tr th:last-child, #bottom #urls table tbody tr td:last-child {
+#bottom #urls table thead tr th:last-child, #bottom #urls table tbody tr td:last-child,
+#bottom #users table thead tr th:last-child, #bottom #users table tbody tr td:last-child {
 	width: 130px;
 }
 
-#bottom #urls table thead tr th {
+#bottom #urls table thead tr th, #bottom #users table thead tr th {
 	font-size: 18px;
 }
 
-#bottom #urls table tbody tr td {
+#bottom #urls table tbody tr td, #bottom #users table tbody tr td {
 	font-size: 15px;
 }
 
-#bottom #urls #delete {
+
+#bottom #users table tbody tr td a.edit {
+	display: block; 
+	height: 61px; 
+	vertical-align: middle; 
+	line-height: 61px;
+}
+#bottom #users table tbody tr td a.edit img { margin-top: 15%; }
+#bottom #users table tbody tr td:last-child { vertical-align: top; }
+#bottom #users table tbody tr td:last-child:hover {
+	background: rgb(31,127,92);
+}
+
+#bottom #urls #delete, #bottom #users #delete {
 	float: right; 
 	height: 61px; 
 	width: 165px; 
@@ -874,9 +903,8 @@ table {
 	cursor: pointer;
 }
 
-#bottom #urls #delete:hover {
+#bottom #urls #delete:hover, #bottom #users #delete:hover {
 	background-color: rgb(31,127,92);
-	
 }
 
 /* Account info */
@@ -892,12 +920,19 @@ table {
 	margin: 15px 0px;
 }
 
+#bottom #account p > a {
+	color: #000;
+	text-decoration: underline;
+}
+
 #bottom #account form {
 	background-color: rgb(35, 35, 35); 
 	width: 100%;
 	height: 319px;
 	color: #fff;
 }
+
+#bottom #account form#user-info { height: 312px; }
 
 #bottom #account form > span {
 	display: block;
@@ -955,19 +990,26 @@ table {
     width: 256px;
 }
 
-#bottom #account form ul#bot-right li input[type="submit"] {
+#bottom #account form ul#bot-right li input[type="submit"], 
+#bottom #account form ul#right li input[type="submit"], #bottom #account form ul#right li button#unlink {
+	margin: 15px 36px 0px;
 	float: right; 
 	height: 61px; 
 	width: 165px; 
 	background-color: rgb(31,127,92);
 	text-align: center; 
-	margin: 15px 36px 0px;
 	color: #fff;
 	text-decoration: none;
 	font: 15px 'Montserrat', sans-serif;
 	vertical-align: middle;
 	border: medium none;
 	cursor: pointer;
+}
+
+#bottom #account form ul#right li input[type="submit"] { margin-top: 0; }
+#bottom #account form ul#right li button#unlink {
+	width: 205px; 
+	margin-top: 0;
 }
 
 /* API Key */
@@ -1214,20 +1256,13 @@ table {
 	font: 700 20px 'Montserrat', sans-serif;
 	padding-bottom: 15px;
 }
-
-.popup > .inner > .content > a#short-url {
-	display: block; 
-	margin: 0 auto;
-	width: 836px; 
-}
-
-.popup > .inner > .content > a#short-url > #link {
+.popup > .inner > .content > a > #link {
 	cursor: pointer;
 	text-align: center;
 	height: 61px; 
 	width: 836px; 
 	background: url("images/clip-icon.png") no-repeat scroll right center #fff;
-	padding: 0px 0px 0px 23px;
+	padding: 0px 23px;
 	color: #000;
 	border: solid 1px rgba(255,255,255,.05);
 	font: 20px 'Montserrat', sans-serif;
@@ -1331,4 +1366,14 @@ table {
 	font: 15px/61px 'Montserrat',sans-serif;
 	color: #fff;
 	background-color: rgb(31,127,92);
+}
+
+#bottom > #notify.error {
+	background-color: #fbe3e4;
+	color: #8a1f11;
+}
+
+#bottom > #notify > a {
+	color: inherit; 
+	text-decoration: underline
 }

@@ -60,6 +60,33 @@ if ((isset($_POST['token']) && isset($_SESSION['csrf_token'])) && $_POST['token'
 $csrf_token = md5(uniqid());
 $_SESSION['csrf_token'] = $csrf_token;
 
+// Admin area
+if (defined('LUS_ADMINAREA')) {
+	$admin_logged_in = false;
+
+	if (isset($_SESSION['admin_id']) && isset($_SESSION['admin_hash'])) {
+		// Lookup user
+		$stmt = $mysqli->prepare("SELECT password FROM `".MYSQL_PREFIX."admins` WHERE id = ? LIMIT 0,1");
+		$stmt->bind_param('i', $_SESSION['admin_id']);
+		$stmt->execute();
+		
+		$stmt->bind_result($pass_hash);
+		
+		$user_ip = ((SITE_VALIDATEIP == true) ? $_SERVER['REMOTE_ADDR'] : '');
+
+		if ($stmt->fetch() === true) {
+			if ($_SESSION['admin_hash'] == md5($_SESSION['admin_id'].$pass_hash.$user_ip)) {
+				$admin_logged_in = true;
+			}
+		}
+		
+		$stmt->close();
+		
+		// Clear results
+		unset($pass_hash, $user_ip);
+	}
+}
+
 // Check if logged in
 $logged_in = false;
 $fb_logged_in = false;
