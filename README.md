@@ -31,6 +31,13 @@ If you would like to see Little URL Shortener in action, please check out [7LS.N
  * Added Facebook support
 * 1.0
  * First public release
+ 
+### To Do ###
+ * Add update script to update versions
+ * Add ability to set HTTP status code for redirect to 301, 302, etc
+ * Add ability to enable/disable public API access
+ * Fix bug causing users birthday to be set to 1969-12-31 when signed up with Facebook
+ * Fix bug that makes users have to login in twice with Facebook
 
 ### License ###
 Little URL Shortener is licensed under the [GNU General Public License](http://www.gnu.org/licenses/gpl.html). Some scripts that it uses are licensed under [GNU Lesser General Public License](http://www.gnu.org/copyleft/lesser.html) and the [MIT license](http://www.opensource.org/licenses/mit-license.php).
