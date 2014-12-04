@@ -37,13 +37,12 @@ If you would like to see Little URL Shortener in action, please check out [7LS.N
  * Add ability to set HTTP status code for redirect to 301, 302, etc
  * Add ability to enable/disable public API access
  * Fix bug causing users birthday to be set to 1969-12-31 when signed up with Facebook
- * Fix bug that makes users have to login in twice with Facebook
+ * ~~Fix bug that makes users have to login in twice with Facebook~~
 
 ### License ###
 Little URL Shortener is licensed under the [GNU General Public License](http://www.gnu.org/licenses/gpl.html). Some scripts that it uses are licensed under [GNU Lesser General Public License](http://www.gnu.org/copyleft/lesser.html) and the [MIT license](http://www.opensource.org/licenses/mit-license.php).
 
 ### Show Your Support ###
-
 Little Apps relies on people like you to keep our software running. If you would like to show your support for Little URL Shortener, then you can [make a donation](http://www.little-apps.com/?donate) using PayPal, Payza or Bitcoins. Please note that any amount helps (even just $1).
 
 ### Credits ###
