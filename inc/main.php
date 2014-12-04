@@ -175,36 +175,46 @@ if (FBLOGIN_ENABLED == true && defined('FBLOGIN_APPID') && defined('FBLOGIN_APPS
 			$fb_logged_in = true;
 		} else {
 			$email = $user_profile->getEmail();
+			$fb_first_name = $user_profile->getFirstName();
+			$fb_last_name = $user_profile->getLastName();
+			$fb_birthdate = $user_profile->getBirthday();
 		
 			// Lookup user
-			$stmt = $mysqli->prepare("SELECT id, password FROM `".MYSQL_PREFIX."users` WHERE email = ? LIMIT 0,1");
+			$stmt = $mysqli->prepare("SELECT id, password, first_name, last_name, birthday FROM `".MYSQL_PREFIX."users` WHERE email = ? LIMIT 0,1");
 			$stmt->bind_param('s', $email);
 			$stmt->execute();
 			
-			$stmt->bind_result($user_id, $pass_hash);
+			$stmt->bind_result($user_id, $pass_hash, $first_name, $last_name, $birthdate);
 			
 			$user_ip = ((SITE_VALIDATEIP == true) ? $_SERVER['REMOTE_ADDR'] : '');
 
 			if ($stmt->fetch() === true) {
+				$stmt->close();
+			
+				// Is FB info up to date?
+				$birthdate_datetime = new DateTime($birthdate);
+				if ($fb_first_name != $first_name || $fb_last_name != $last_name || $fb_birthdate != $birthdate_datetime) {
+					// Convert birthdate to valid string format
+					$birthdate_formatted = sprintf("%04d-%02d-%02d", $fb_birthdate->format('Y'), $fb_birthdate->format('m'), $fb_birthdate->format('d'));
+				
+					if ($stmt = $mysqli->prepare("UPDATE `".MYSQL_PREFIX."users` SET first_name = ?, last_name = ?, birthday = ? WHERE id = ?")) {
+						$stmt->bind_param('sssi', $fb_first_name, $fb_last_name, $birthdate_formatted, $user_id);
+						$stmt->execute();
+						$stmt->close();
+					}
+				}
+			
 				$_SESSION['user_id'] = $user_id;
 				$_SESSION['user_hash'] = md5($user_id.$email.$pass_hash.$user_ip);
+				
 				$logged_in = true;
 				$fb_logged_in = true;
-				
-				$stmt->close();
 			} else {
 				// Not registered yet
 				$stmt->close();
 				
-				// Get info from FB
-				$first_name = $user_profile->getFirstName();
-				$last_name = $user_profile->getLastName();
-				
 				// Convert birthdate to valid string format
-				$birthdate = $user_profile->getBirthday();
-				
-				// Convert birthdate to valid string format
-				$birthdate_formatted = sprintf("%04d-%02d-%02d", $birthdate->format('Y'), $birthdate->format('m'), $birthdate->format('d'));
+				$birthdate_formatted = sprintf("%04d-%02d-%02d", $fb_birthdate->format('Y'), $fb_birthdate->format('m'), $fb_birthdate->format('d'));
 			
 				// Hash password
 				require_once(dirname(__FILE__).'/passhash.class.php');
@@ -218,7 +228,7 @@ if (FBLOGIN_ENABLED == true && defined('FBLOGIN_APPID') && defined('FBLOGIN_APPS
 			
 				// Insert new user
 				$stmt = $mysqli->prepare("INSERT INTO `".MYSQL_PREFIX."users` (`first_name`,`last_name`,`email`,`birthday`,`password`,`api_key`,`activate_key`) VALUES (?,?,?,?,?,?,?)");
-				$stmt->bind_param('sssssss', $first_name, $last_name, $email, $birthdate_formatted, $pass_hash, $api_key, $activate_key);
+				$stmt->bind_param('sssssss', $fb_first_name, $fb_last_name, $email, $birthdate_formatted, $pass_hash, $api_key, $activate_key);
 				$stmt->execute();
 				$stmt->close();
 				
