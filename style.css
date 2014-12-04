@@ -742,6 +742,7 @@ table {
 }
 #footer #copyright {
 	float: left;
+	width: 382px;
 }
 
 #footer #navigation {
