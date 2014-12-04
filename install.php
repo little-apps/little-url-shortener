@@ -84,9 +84,14 @@
 		$messages[] = 'PHP extension JSON is not installed.';
 	}
 	
+	// Make sure Multibyte String is installed
+	if (!extension_loaded('mbstring')) {
+		$messages[] = 'PHP extension Multibyte String is not installed.';
+	}
+	
 	// Make sure PHP version is at least v5.3
-	if (version_compare(PHP_VERSION, '5.3.0') < 0) {
-		$messages[] = 'You must be running at least PHP v5.3.0.';
+	if (version_compare(PHP_VERSION, '5.4.0') < 0) {
+		$messages[] = 'You must be running at least PHP v5.4.0.';
 	}
 	
 	// Make sure config.php is writable
