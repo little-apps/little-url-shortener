@@ -45,18 +45,6 @@
 			setcookie("7LSNETHASH", "", time()-3600);
 		}
 		
-		if ($fb_logged_in === true) {
-			if (!isset($facebook)) {
-				require_once(dirname(__FILE__).'/inc/facebook-api/facebook.php');
-				$facebook = new Facebook(array('appId'  => FBLOGIN_APPID, 'secret' => FBLOGIN_APPSECRET));
-			}
-		
-			$facebook->destroySession();
-			
-			// Get login URL
-			$fb_login_url = $facebook->getLoginUrl(array('scope' => 'email,user_about_me,user_birthday', 'redirect_uri' => SITE_URL . '/login.php'));
-		}
-		
 		// Create new session
 		session_start();
 		session_regenerate_id(true);
