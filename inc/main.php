@@ -249,8 +249,7 @@ if (FBLOGIN_ENABLED == true && defined('FBLOGIN_APPID') && defined('FBLOGIN_APPS
 			}
 
 			// Clear results
-			unset($email);
-			unset($pass_hash);
+			unset($email, $pass_hash, $fb_first_name, $fb_last_name, $fb_birthdate, $birthdate_formatted);
 		}
 	} 
 
