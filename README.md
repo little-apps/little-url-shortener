@@ -37,7 +37,7 @@ If you would like to see Little URL Shortener in action, please check out [7LS.N
  * Add update script to update versions
  * Add ability to set HTTP status code for redirect to 301, 302, etc
  * Add ability to enable/disable public API access
- * Fix bug causing users birthday to be set to 1969-12-31 when signed up with Facebook
+ * ~~Fix bug causing users birthday to be set to 1969-12-31 when signed up with Facebook~~
  * ~~Fix bug that makes users have to login in twice with Facebook~~
 
 ### License ###
