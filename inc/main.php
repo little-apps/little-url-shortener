@@ -272,17 +272,8 @@ if ($csrf_valid == true && isset($_POST['url'])) {
 		}
 		
 		// Generate short URL
-		$short_url_path = '';
-		
 		$salt = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-		$salt_len = strlen( $salt );
-
-		mt_srand();
-
-		for ( $i = 0; $i < SITE_SHORTURLLENGTH; $i++ ) {
-			$chr = $salt[ mt_rand( 0, $salt_len - 1 ) ];
-			$short_url_path .= $chr;
-		}
+		$short_url_path = substr(str_shuffle($salt), 0, SITE_SHORTURLLENGTH);
 		
 		$stmt = $mysqli->prepare("INSERT INTO `".MYSQL_PREFIX."urls` (`short_url`,`long_url`,`user`,`visits`) VALUES (?,?,?,0)");
 		$stmt->bind_param('ssi', $short_url_path, $url, $user_id);
@@ -290,22 +281,14 @@ if ($csrf_valid == true && isset($_POST['url'])) {
 		
 		while ($stmt->affected_rows !== 1) {
 			// Regenerate short URL
-			$short_url_path = '';
-
-			mt_srand();
-
-			for ( $i = 0; $i < SITE_SHORTURLLENGTH; $i++ ) {
-				$chr = $salt[ mt_rand( 0, $salt_len - 1 ) ];
-				$short_url_path .= $chr;
-			}
+			$short_url_path = substr(str_shuffle($salt), 0, SITE_SHORTURLLENGTH);
 			
 			$stmt->reset();
 			$stmt->execute();
 		}
 		
 		$stmt->close();
-		
-		
+
 		if ($is_ssl_url)
 			$short_url = SITE_SSLURL . '/' . $short_url_path;
 		else
