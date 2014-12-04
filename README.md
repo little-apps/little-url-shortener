@@ -15,6 +15,7 @@ The following is required to run Little URL Shortener properly:
  * [GD (Image Processing)](http://php.net/manual/en/book.image.php)
  * [Session](http://php.net/manual/en/book.session.php)
  * [JSON](http://php.net/manual/en/book.json.php)
+ * [Multibyte String](http://php.net/manual/en/book.mbstring.php)
 
 ### Installation ###
 To install Little URL Shortener, simply navigate to the "install.php" file in your web browser. For example, http://www.mywebsite.com/install.php.
