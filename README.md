@@ -8,7 +8,7 @@ Little URL Shortener allows users to convert long URLs to short and easy to reme
 The following is required to run Little URL Shortener properly:
 
 * Web server with URL rewrite support (including, but not limited to, [Apache](http://httpd.apache.org/), [LiteSpeed](http://www.litespeedtech.com/) and [Nginx](http://nginx.org))
-* [PHP v5.3](http://php.net/) or higher
+* [PHP v5.4](http://php.net/) or higher
 * [MySQL](http://www.mysql.com/) or [MariaDB](https://www.mariadb.org) v5.5 or higher
 * PHP extensions:
  * [MySQL Improved](http://php.net/manual/en/book.mysqli.php)
