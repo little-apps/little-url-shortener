@@ -46,7 +46,7 @@ session_start();
 $min_year = date('Y', strtotime('-100 years'));
 $max_year = date('Y', strtotime('-10 years'));
 
-// Initilaze message variables
+// Initialize message variables
 $messages = array();
 
 // If CSRF token was sent in POST, check if it's valid
