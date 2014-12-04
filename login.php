@@ -54,7 +54,7 @@
 			$facebook->destroySession();
 			
 			// Get login URL
-			$fb_login_url = $facebook->getLoginUrl(array('scope' => 'email,user_about_me,user_birthday', 'redirect_uri' => SITE_URL . '/account.php'));
+			$fb_login_url = $facebook->getLoginUrl(array('scope' => 'email,user_about_me,user_birthday', 'redirect_uri' => SITE_URL . '/login.php'));
 		}
 		
 		// Create new session
