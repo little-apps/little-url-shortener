@@ -302,6 +302,8 @@ if ($csrf_valid == true && isset($_POST['url'])) {
 		$salt = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 		$salt_len = strlen( $salt );
 		
+		$short_url_path = '';
+		
 		mt_srand(); 
 
         for ( $i = 0; $i < SITE_SHORTURLLENGTH; $i++ ) { 
