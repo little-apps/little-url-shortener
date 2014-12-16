@@ -156,7 +156,7 @@ if ($_GET['request'] == 'create') {
 		$path = $url;
 	}
 	
-	if (strlen($path) != SITE_SHORTURLLENGTH) {
+	if (strlen($path) > 8) {
 		die(json_encode(array('status' => 'error', 'message' => 'Short URL is invalid')));
 	}
 	
