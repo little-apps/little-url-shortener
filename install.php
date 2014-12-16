@@ -194,8 +194,8 @@
 			
 			if (!is_numeric($site_options['shorturl-length'])) {
 				$messages[] = "Short URL length must be number.";
-			} else if ($site_options['shorturl-length'] <= 0 || $site_options['shorturl-length'] > 100) {
-				$messages[] = "Short URL length must be between 1-100.";
+			} else if ($site_options['shorturl-length'] <= 0 || $site_options['shorturl-length'] > 8) {
+				$messages[] = "Short URL length must be between 1-8.";
 			}
 			
 			if (!isset($site_options['validate-ip']))
@@ -378,7 +378,7 @@ define('SITE_SSLURL', '{$site_options_strings['ssl-url']}');
 define('SITE_NAME', '{$site_options_strings['name']}');
 define('SITE_NOREPLY', '{$site_options_strings['noreply-email']}');
 define('SITE_ADMINEMAIL', '{$site_options_strings['admin-email']}');
-define('SITE_SHORTURLLENGTH', {$site_options_strings['shorturl-length']});
+define('SITE_SHORTURLLENGTH', {$site_options_strings['shorturl-length']}); // Currently, this cannot be greater than 8
 define('SITE_VALIDATEIP', {$site_options_strings['validate-ip']}); // If true, sessions are locked to one IP address
 
 define('SITE_GANALYTICS', {$site_options_strings['ganalytics']}); // Set to true to enable Google Analytics tracking

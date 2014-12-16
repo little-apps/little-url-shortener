@@ -7,7 +7,7 @@ define('SITE_SSLURL', 'https://www.example.com');
 define('SITE_NAME', 'Your site name');
 define('SITE_NOREPLY', 'noreply@example.com');
 define('SITE_ADMINEMAIL', 'webmaster@example.com');
-define('SITE_SHORTURLLENGTH', 7);
+define('SITE_SHORTURLLENGTH', 7); // Currently, this cannot be greater than 8
 define('SITE_VALIDATEIP', true); // If true, sessions are locked to one IP address
 
 define('SITE_GANALYTICS', false); // Set to true to enable Google Analytics tracking
