@@ -20,32 +20,43 @@
 if (!defined('LUS_LOADED')) die('This file cannot be loaded directly');
 
 function send_email($to_email, $to_name, $from_email, $from_name, $subject, $message) {
-	require_once(dirname(__FILE__).'/phpmailer/class.phpmailer.php');
-	
-	$mail = new PHPMailer();
-	
-	if (strtolower(MAIL_MAILER) == 'smtp') {
-		$mail->IsSMTP();
-		
-		$mail->Host = SMTP_HOST;
-		$mail->Port = SMTP_PORT;
-		$mail->Secure = SMTP_SECURE;
-		$mail->SMTPAuth = true;
-		$mail->Username = SMTP_USER;
-		$mail->Password = SMTP_PASS;
-	} else if (strtolower(MAIL_MAILER) == 'sendmail') {
-		$mail->IsSendmail();
-		$mail->Sendmail = SENDMAIL_PATH;
-	} else {
-		$mail->IsMail();
+	global $php_mailer;
+        
+	if ( !isset( $php_mailer ) ) {
+		require_once( dirname(__FILE__).'/phpmailer/PHPMailerAutoload.php' );
+
+		$php_mailer = new PHPMailer();
 	}
 	
-	$mail->SetFrom($from_email, $from_name);
-	$mail->AddAddress($to_email, $to_name);
-	$mail->Subject = $subject;
-	$mail->isHTML(false);
-	$mail->Body = $message;
-	$mail->Send();
+	if (strcasecmp(MAIL_MAILER, 'smtp') == 0) {
+		$php_mailer->isSMTP();
+		$php_mailer->Host = SMTP_HOST;
+		$php_mailer->Port = intval( SMTP_PORT );
+		
+		$smtp_user = ( defined('SMTP_USER') ? SMTP_USER : '' );
+		$smtp_pass = ( defined('SMTP_PASS') ? SMTP_PASS : '' );
+
+		if (!empty($smtp_user) || !empty($smtp_pass)) {
+			$php_mailer->SMTPAuth = true;
+			$php_mailer->Username = (!empty($smtp_user) ? $smtp_user : '');
+			$php_mailer->Password = (!empty($smtp_pass) ? $smtp_pass : '');
+		} else {
+			$php_mailer->SMTPAuth = false;
+		}
+	} else if (strcasecmp(MAIL_MAILER, 'sendmail') == 0) {
+		$php_mailer->isSendmail();
+		$php_mailer->Sendmail = SENDMAIL_PATH;
+	} else {
+		$php_mailer->isMail();
+	}
+	
+	$php_mailer->SetFrom($from_email, $from_name);
+	$php_mailer->addAddress($to_email, $to_name);
+	$php_mailer->Subject = $subject;
+	$php_mailer->isHTML(false);
+	$php_mailer->Body = $message;
+	
+	$php_mailer->send();
 }
 
 function output_short_url() {
