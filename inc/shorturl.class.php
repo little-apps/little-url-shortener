@@ -35,8 +35,16 @@ class ShortURL {
 	private $is_ssl_url = false;
 	private $long_url;
 	
+	/**
+	* 
+	* @var string If an error occurred, contains error message. Otherwise, it is an empty string
+	* 
+	*/
 	public $error_msg = '';
 	
+	/**
+	* ShortURL class constructor
+	*/
 	public function __construct() {
 		global $mysqli;
 		
@@ -46,6 +54,9 @@ class ShortURL {
 		$this->prepare();
 	}
 	
+	/**
+	* Prepares Short URL code
+	*/
 	private function prepare() {
 		$this->generate_code();
 		
@@ -58,6 +69,9 @@ class ShortURL {
 		}
 	}
 	
+	/**
+	* Generates code and stores it in $this->code
+	*/
 	private function generate_code() {
 		$this->code = '';
 		
@@ -69,6 +83,11 @@ class ShortURL {
         }
 	}
 	
+	/**
+	* Checks if code exists
+	* 
+	* @return bool Returns true if code already exists, otherwise, false
+	*/
 	private function code_exists() {
 		if (empty($this->code))
 			throw new Exception(self::ERROR_MISSING_VAR);
@@ -91,11 +110,21 @@ class ShortURL {
 		return (intval($count) > 0 ? true : false); 
 	}
 	
+	/**
+	* Sets user ID to be stored with short URL
+	* @param integer $id User ID
+	*/
 	public function set_user_id($id) {
 		if (is_numeric($id))
 			$this->user_id = intval($id);
 	}
 	
+	/**
+	* Creates short URL
+	* @param string $long_url URL for short URL to be linked 
+	* 
+	* @return bool True if URL was created. Otherwise, it will be false and the error message will be stored in $this->error_msg
+	*/
 	public function create($long_url) {
 		if (!filter_var($long_url, FILTER_VALIDATE_URL)) {
 			$this->error_msg = self::ERROR_INVALID_URL;
@@ -117,6 +146,11 @@ class ShortURL {
 		}
 	}
 	
+	/**
+	* Gets short URL
+	* 
+	* @return Short URL (with http:// or https://)
+	*/
 	public function get_short_url() {
 		if ($this->is_ssl_url)
 			$url = SITE_SSLURL;
@@ -128,6 +162,12 @@ class ShortURL {
 		return $url;
 	}
 	
+	/**
+	* Validates long URL
+	* @param string $url Long URL
+	* 
+	* @return True if URL is valid. Otherwise, false and the error message will be stored in $this->error_msg
+	*/
 	private function validate_url($url) {
 		// Parse URL
 		$url_parts = parse_url($url);
@@ -160,6 +200,11 @@ class ShortURL {
 		return true;
 	}
 	
+	/**
+	* Inserts short URL with long URL into database
+	* 
+	* @return bool True if it was inserted. Otherwise, false and the error message will be stored in $this->error_msg
+	*/
 	private function insert() {
 		if ($stmt = $this->db->prepare("INSERT INTO `".MYSQL_PREFIX."urls` (`short_url`,`long_url`,`user`,`visits`) VALUES (?,?,?,0)")) {
 			$stmt->bind_param('ssi', $this->code, $this->long_url, $this->user_id);
@@ -184,12 +229,20 @@ class ShortURL {
 		}
 	}
 	
+	/**
+	* Generates and store token for QR code
+	*/
 	private function generate_img_token() {
 		$token = md5(uniqid('image_'));
 		
 		$_SESSION['image_token'] = $token;
 	}
 	
+	/**
+	* Gets the short URL code (not the URL)
+	* 
+	* @return Short URL code
+	*/
 	public function __toString() {
         return $this->code;
     }
