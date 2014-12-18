@@ -19,6 +19,16 @@
 
 if (!defined('LUS_LOADED')) die('This file cannot be loaded directly');
 
+/**
+* Sends e-mail with PHPMailer class
+* 
+* @param string $to_email To e-mail
+* @param string $to_name To name
+* @param string $from_email From e-mail
+* @param string $from_name From name
+* @param string $subject Subject
+* @param string $message Message
+*/
 function send_email($to_email, $to_name, $from_email, $from_name, $subject, $message) {
 	global $php_mailer;
         
@@ -59,6 +69,9 @@ function send_email($to_email, $to_name, $from_email, $from_name, $subject, $mes
 	$php_mailer->send();
 }
 
+/**
+* Outputs Short URL box
+*/
 function output_short_url() {
 	if (isset($_SESSION['short_url'])) { 
 ?>
@@ -81,6 +94,9 @@ function output_short_url() {
 	}
 }
 
+/**
+* Ouputs errors box
+*/
 function output_errors() {
 	global $messages;
 	
@@ -101,6 +117,12 @@ function output_errors() {
 	endif;
 }
 
+/**
+* Redirects user to URL (Please note this halts the script)
+* 
+* @param string $url URL to redirect to
+* @param integer $status_code HTTP status code (default: 301)
+*/
 function redirect($url, $status_code = 301) {
 	if (!is_numeric($status_code))
 		$status_code = 301;
@@ -131,10 +153,18 @@ function redirect($url, $status_code = 301) {
 	die();
 }
 
+/**
+* Outputs title
+* 
+* @param string $page Page name
+*/
 function title($page) {
 	echo SITE_NAME . ' | ' . $page;
 }
 
+/**
+* Outputs meta tags
+*/
 function meta_tags() {
 ?>
 	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
@@ -143,6 +173,9 @@ function meta_tags() {
 <?php
 }
 
+/**
+* Outputs Google Analytics tracking code (if enabled)
+*/
 function ganalytics_tracking() {
 	if ((defined('SITE_GANALYTICS') && defined('SITE_GANALYTICS_ID')) && SITE_GANALYTICS && strlen(SITE_GANALYTICS_ID) > 0) :
 ?>
