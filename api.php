@@ -20,6 +20,7 @@
 define('LUS_LOADED', true);
 
 require_once('inc/config.php');
+require_once('inc/shorturl.class.php');
 
 // Uncomment this to enable debugging (not recommended)
 error_reporting(0);
@@ -32,6 +33,11 @@ if (mysqli_connect_error()) {
 }
 
 header('Content-Type: text/json');
+
+$shorturl = new ShortURL();
+
+if (!empty($shorturl->error_msg))
+	die(json_encode(array('status' => 'error', 'message' => $shorturl->error_msg)));
 
 if ( $_SERVER['REQUEST_METHOD'] && $_SERVER['REQUEST_METHOD'] != 'GET' ) {
     header( 'Allow: GET', true, 405 );
@@ -57,27 +63,6 @@ if (!isset($_GET['url'])) {
 $url = $_GET['url'];
 
 if ($_GET['request'] == 'create') {
-	if (!filter_var($url, FILTER_VALIDATE_URL)) {
-		die(json_encode(array('status' => 'error', 'message' => 'URL is invalid')));
-	}
-
-	// Parse URL
-	$url_parts = parse_url($url);
-
-	// Make sure its http or https
-	if (!isset($url_parts['scheme'])) {
-		die(json_encode(array('status' => 'error', 'message' => 'No URL scheme specified')));
-	} else if (strtolower($url_parts['scheme']) != 'http' && strtolower($url_parts['scheme']) != 'https') {
-		die(json_encode(array('status' => 'error', 'message' => 'URL scheme is invalid')));
-	}
-	
-	if (substr_compare($url, SITE_URL, 0, strlen(SITE_URL), true) == 0 || substr_compare($url, SITE_SSLURL, 0, strlen(SITE_SSLURL), true) == 0) {
-		die(json_encode(array('status' => 'error', 'message' => 'Cannot shorten URL for another shortened URL')));
-	}
-
-	// Is it a secure URL?
-	$is_ssl_url = ( (strtolower($url_parts['scheme']) == 'https') ? true : false );
-
 	$api_key = ( isset($_GET['api_key']) ? trim(strtolower($_GET['api_key'])) : '' );
 
 	$user_id = 0;
@@ -98,49 +83,18 @@ if ($_GET['request'] == 'create') {
 
 		$stmt->close();
 	}
-
-	// Generate short URL
-	$short_url_path = '';
 	
-	$salt = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-	$salt_len = strlen( $salt );
+	if ($user_id > 0)
+		$shorturl->set_user_id($user_id);
 
-	mt_srand();
-
-	for ( $i = 0; $i < SITE_SHORTURLLENGTH; $i++ ) {
-		$chr = $salt[ mt_rand( 0, $salt_len - 1 ) ];
-		$short_url_path .= $chr;
+	if ($shorturl->create($url)) {
+		$short_url = $shorturl->get_short_url();
+		$data = array('status' => 'success', 'shorturl' => $short_url, 'longurl' => $url);
+	} else {
+		$data = json_encode(array('status' => 'error', 'message' => $shorturl->error_msg));
 	}
-	
-	$stmt = $mysqli->prepare("INSERT INTO `".MYSQL_PREFIX."urls` (`short_url`,`long_url`,`user`,`visits`) VALUES (?,?,?,0)");
-	$stmt->bind_param('ssi', $short_url_path, $url, $user_id);
-	$stmt->execute();
-	
-	while ($stmt->affected_rows !== 1) {
-		// Regenerate short URL
-		$short_url_path = '';
-
-		mt_srand();
-
-		for ( $i = 0; $i < SITE_SHORTURLLENGTH; $i++ ) {
-			$chr = $salt[ mt_rand( 0, $salt_len - 1 ) ];
-			$short_url_path .= $chr;
-		}
-		
-		$stmt->reset();
-		$stmt->execute();
-	}
-	
-	$stmt->close();
-	
-	if ($is_ssl_url)
-		$short_url = SITE_SSLURL . '/' . $short_url_path;
-	else
-		$short_url = SITE_URL . '/' . $short_url_path;
 	
 	// Return JSON
-	$data = array('status' => 'success', 'shorturl' => $short_url, 'longurl' => $url);
-	
 	echo stripslashes(json_encode($data));
 } else if ($_GET['request'] == 'get') {
 	$path = '';
