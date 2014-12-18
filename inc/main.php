@@ -47,6 +47,21 @@ if (mysqli_connect_error()) {
     die('Connect Error (' . mysqli_connect_errno() . ') ' . mysqli_connect_error());
 }
 
+// If magic quotes enabled -> remove slashes
+if (get_magic_quotes_gpc()) {
+	if (!empty($_POST)) {
+		foreach ($_POST as $k => $v) {
+			$_POST[$k] = stripslashes($v);
+		}
+	}
+	
+	if (!empty($_GET)) {
+		foreach ($_GET as $k => $v) {
+			$_GET[$k] = stripslashes($v);
+		}
+	}
+}
+
 // Start session
 session_start();
 
