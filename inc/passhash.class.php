@@ -22,6 +22,8 @@ class PassHash {
 	* @return string Unique salt
 	*/
     public static function unique_salt() {
+    	mt_srand();
+    	
         return substr(sha1(mt_rand()),0,22);
     }
 
