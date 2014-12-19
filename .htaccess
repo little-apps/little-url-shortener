@@ -1,4 +1,7 @@
 Options +FollowSymLinks
 RewriteEngine On
+
+RewriteRule ^inc/[a-z]+/(.*)$ /index.php [R=301,L]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ /index.php?code=$1 [R=302,L]
