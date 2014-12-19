@@ -1,0 +1,28 @@
+{
+    "name": "little-apps/little-url-shortener",
+	"type": "project",
+    "description": "Little URL Shortener allows users to convert long URLs to short and easy to remember URLs.",
+    "version": "1.2-dev",
+    "keywords": ["little", "url", "shortener"],
+    "homepage": "http://www.little-url-shortener.com",
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Nick H",
+            "email": "nick@little-apps.com",
+            "homepage": "https://www.little-apps.com",
+            "role": "Developer"
+        }
+    ],
+	"require": {
+		"php": ">=5.4",
+		"ext-gd": "*",
+        "ext-curl": "*",
+		"ext-mysqli": "*",
+		"ext-session": "*",
+		"ext-json": "*",
+		"ext-mbstring": "*",
+		"phpmailer/phpmailer": "*",
+		"facebook/php-sdk-v4": "*"
+	}
+}
