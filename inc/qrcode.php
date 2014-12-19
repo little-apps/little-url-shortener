@@ -28,7 +28,9 @@ if (!isset($_GET['token'])) {
 	die('No short URL found');
 }
 
-require_once(dirname(__FILE__).'/phpqrcode/qrlib.php');
+require_once(dirname(__FILE__).'/phpqrcode/lib/PHPQRCode.php');
+
+\PHPQRCode\Autoloader::register();
 
 // Prevent caching
 header( "Expires: Mon, 26 Jul 1997 05:00:00 GMT" );
@@ -38,7 +40,7 @@ header( "Cache-Control: post-check=0, pre-check=0", false );
 header( "Pragma: no-cache" );
 header( "Content-type: image/png" );
 
-QRcode::png($_SESSION['short_url'], false, QR_ECLEVEL_L, $size = 7);
+\PHPQRCode\QRcode::png($_SESSION['short_url'], false, QR_ECLEVEL_L, 7);
 
 // Unset variables
 //unset($_SESSION['image_token']);

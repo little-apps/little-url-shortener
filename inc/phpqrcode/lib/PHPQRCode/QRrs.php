@@ -2,7 +2,10 @@
 /*
  * PHP QR Code encoder
  *
- * Root library file, prepares environment and includes dependencies
+ * Reed-Solomon error correction support
+ * 
+ * Copyright (C) 2002, 2003, 2004, 2006 Phil Karn, KA9Q
+ * (libfec is released under the GNU Lesser General Public License.)
  *
  * Based on libqrencode C library distributed under LGPL 2.1
  * Copyright (C) 2006, 2007, 2008, 2009 Kentaro Fukuchi <fukuchi@megaui.net>
@@ -24,20 +27,30 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
-	
-	$QR_BASEDIR = dirname(__FILE__).DIRECTORY_SEPARATOR;
-	
-	// Required libs
-	
-	include $QR_BASEDIR."qrconst.php";
-	include $QR_BASEDIR."qrconfig.php";
-	include $QR_BASEDIR."qrtools.php";
-	include $QR_BASEDIR."qrspec.php";
-	include $QR_BASEDIR."qrimage.php";
-	include $QR_BASEDIR."qrinput.php";
-	include $QR_BASEDIR."qrbitstream.php";
-	include $QR_BASEDIR."qrsplit.php";
-	include $QR_BASEDIR."qrrscode.php";
-	include $QR_BASEDIR."qrmask.php";
-	include $QR_BASEDIR."qrencode.php";
 
+namespace PHPQRCode;
+
+class QRrs {
+
+    public static $items = array();
+
+    //----------------------------------------------------------------------
+    public static function init_rs($symsize, $gfpoly, $fcr, $prim, $nroots, $pad)
+    {
+        foreach(self::$items as $rs) {
+            if($rs->pad != $pad)       continue;
+            if($rs->nroots != $nroots) continue;
+            if($rs->mm != $symsize)    continue;
+            if($rs->gfpoly != $gfpoly) continue;
+            if($rs->fcr != $fcr)       continue;
+            if($rs->prim != $prim)     continue;
+
+            return $rs;
+        }
+
+        $rs = QRrsItem::init_rs_char($symsize, $gfpoly, $fcr, $prim, $nroots, $pad);
+        array_unshift(self::$items, $rs);
+
+        return $rs;
+    }
+}
