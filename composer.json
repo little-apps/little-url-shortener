@@ -23,6 +23,7 @@
 		"ext-json": "*",
 		"ext-mbstring": "*",
 		"phpmailer/phpmailer": "*",
-		"facebook/php-sdk-v4": "*"
+		"facebook/php-sdk-v4": "*",
+		"aferrandini/phpqrcode": ">=1.0.1"
 	}
 }
