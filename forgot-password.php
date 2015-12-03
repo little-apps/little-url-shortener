@@ -130,22 +130,26 @@
 			}
 		}
 	} else if (isset($_GET['key'])) {
-		$reset_key = $_GET['key'];
-	
-		$stmt = $mysqli->prepare("SELECT id, email, first_name FROM `".MYSQL_PREFIX."users` WHERE reset_password_key = ? LIMIT 0,1");
-		$stmt->bind_param('s', $reset_key);
-		$stmt->execute();
+		$reset_key = trim(strtolower($_GET['key']));
 		
-		$stmt->bind_result($user_id, $user_email, $first_name);
-		
-		if ($stmt->fetch() !== true) {
-			$messages[] = 'Reset password key is invalid';
+		if (empty($reset_key)) {
+			$messages[] = 'Reset password key cannot be blank';
 		} else {
-			$_SESSION['user_id'] = $user_id;
-			$_SESSION['user_email'] = $user_email;
-			$_SESSION['user_first_name'] = $first_name;
+			$stmt = $mysqli->prepare("SELECT id, email, first_name FROM `".MYSQL_PREFIX."users` WHERE reset_password_key = ? LIMIT 0,1");
+			$stmt->bind_param('s', $reset_key);
+			$stmt->execute();
 			
-			$show_reset_form = true;
+			$stmt->bind_result($user_id, $user_email, $first_name);
+			
+			if ($stmt->fetch() !== true) {
+				$messages[] = 'Reset password key is invalid';
+			} else {
+				$_SESSION['user_id'] = $user_id;
+				$_SESSION['user_email'] = $user_email;
+				$_SESSION['user_first_name'] = $first_name;
+				
+				$show_reset_form = true;
+			}
 		}
 	}
 ?>
