@@ -46,18 +46,22 @@
 		$email = ( (isset($_POST['email'])) ? trim($_POST['email']) : '' );
 		$message = ( (isset($_POST['message'])) ? trim($_POST['message']) : '' );
 		
-		if ($name == '') {
-			$messages[] = "Name cannot be blank";
-		}
-		
-		if ($email == '') {
-			$messages[] = "E-mail cannot be empty";
-		} else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-			$messages[] = 'E-mail is invalid';
-		}
-		
-		if ($message == '') {
-			$messages[] = "Message cannot be blank";
+		if (!SITE_CONTACTFORM) {
+			$messages[] = 'Contact form has been disabled';
+		} else {
+			if ($name == '') {
+				$messages[] = "Name cannot be blank";
+			}
+			
+			if ($email == '') {
+				$messages[] = "E-mail cannot be empty";
+			} else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+				$messages[] = 'E-mail is invalid';
+			}
+			
+			if ($message == '') {
+				$messages[] = "Message cannot be blank";
+			}
 		}
 		
 		if (count($messages) == 0) {
@@ -242,14 +246,22 @@
 		<div id="wrapper">
 			<div id="contact">
 				<?php if (isset($success_message)) : ?><div id="notify"><?php echo $success_message ?></div><?php endif; ?>
-				<p id="title">If you would like to contact us, please use the form below</p>
+				
+				
+				<p id="title">
+					<?php if ( SITE_CONTACTFORM ) : ?>
+					If you would like to contact us, please use the form below
+					<?php else : ?>
+					Contact form has been disabled
+					<?php endif; ?>
+				</p>
 				<form action="contact.php" method="post">
 					<input type="hidden" name="token" value="<?php echo $csrf_token; ?>" />
 					<ul>
-						<li><label for="name">Name</label><input type="text" name="name" id="name" value="<?php echo $name ?>" /></li>
-						<li><label for="email">Email</label><input type="text" name="email" id="email" value="<?php echo $email ?>" /></li>
-						<li style="height: 312px"><label for="message">Message</label><textarea name="message" id="message"><?php echo $message ?></textarea></li>
-						<li><input type="submit" name="submit" id="submit" value="Send" /></li>
+						<li><label for="name">Name</label><input type="text" name="name" id="name" value="<?php echo $name ?>" <?php echo ( !SITE_CONTACTFORM ? 'disabled' : '' ); ?> /></li>
+						<li><label for="email">Email</label><input type="text" name="email" id="email" value="<?php echo $email ?>" <?php echo ( !SITE_CONTACTFORM ? 'disabled' : '' ); ?> /></li>
+						<li style="height: 312px"><label for="message">Message</label><textarea name="message" id="message" <?php echo ( !SITE_CONTACTFORM ? 'disabled' : '' ); ?>><?php echo $message ?></textarea></li>
+						<li><input type="submit" name="submit" id="submit" value="Send" <?php echo ( !SITE_CONTACTFORM ? 'disabled' : '' ); ?> /></li>
 					</ul>
 				</form>
 			</div>		
