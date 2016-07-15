@@ -94,7 +94,7 @@
 		<title><?php title('Contact'); ?></title>
 		<?php meta_tags(); ?>
 		
-		<link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css' />
+		<link href='//fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css' />
 		<link rel="stylesheet" type="text/css" href="style.css" media="screen">
 		<script src="js/jquery.min.js" type="text/javascript"></script>
 		<script src="js/jquery-ui-1.10.2.custom.min.js" type="text/javascript"></script>
