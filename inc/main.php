@@ -29,12 +29,6 @@ require_once(dirname(__FILE__).'/config.php');
 require_once(dirname(__FILE__).'/functions.php');
 require_once(dirname(__FILE__).'/shorturl.class.php');
 
-use Facebook\FacebookSession;
-use Facebook\FacebookRedirectLoginHelper;
-use Facebook\FacebookRequest;
-use Facebook\GraphUser;
-use Facebook\FacebookRequestException;
-
 if (file_exists('install.php')) {
 	die('The file install.php must be removed before using this script.');
 }
@@ -152,56 +146,59 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_hash'])) {
 
 // Check if logged in with Facebook
 if (FBLOGIN_ENABLED == true && defined('FBLOGIN_APPID') && defined('FBLOGIN_APPSECRET') ) {
-	FacebookSession::setDefaultApplication(FBLOGIN_APPID, FBLOGIN_APPSECRET);
+	$fb = new Facebook\Facebook([
+		'app_id'     => FBLOGIN_APPID,
+		'app_secret' => FBLOGIN_APPSECRET,
+		'default_graph_version' => 'v2.4',
+	]);
 	
-	$helper = new FacebookRedirectLoginHelper(SITE_URL . '/login.php');
+	$redirectUri = SITE_SSLURL . '/login.php';
+	
+	$helper = $fb->getRedirectLoginHelper();
 
 	try {
-		$session = $helper->getSessionFromRedirect();
-	} catch(FacebookRequestException $ex) {
+		$accessToken = $helper->getAccessToken();
+	} catch(Facebook\Exceptions\FacebookSDKException $e) {
 		// When Facebook returns an error
 		$messages[] = 'There was an error communicating with Facebook. Please try again';
-		$session = null;
-	} catch(\Exception $ex) {
-		// When validation fails or other local issues
-		$messages[] = 'There was an error validating your Facebook account. Please try again';
-		$session = null;
 	}
 	
-	if ($session) { 
+	if (isset($accessToken)) { 
+		$fb->setDefaultAccessToken($accessToken);
+		
 		try {
-			$user_profile = (new FacebookRequest($session, 'GET', '/me'))->execute()->getGraphObject(GraphUser::className());
-			$permissions = (new FacebookRequest($session, 'GET', '/me/permissions'))->execute()->getGraphObject();
-
-			$granted_permission = array();
+			$permissions = $fb->get('/me/permissions')->getGraphEdge();
 			
-			foreach ($permissions->asArray() as $v) {
-				if ((isset($v->permission) && (isset($v->status))) && $v->status == 'granted')
-					$granted_permission[] = $v->permission;
+			$grantedPermission = array();
+			
+			foreach ($permissions as $v) {
+				if (isset($v['permission']) && isset($v['status']) && $v['status'] == 'granted')
+					array_push($grantedPermission, $v['permission']);
 			}
 			
-			if (!in_array('email', $granted_permission) ||
-				!in_array('user_about_me', $granted_permission) ||
-				!in_array('user_birthday', $granted_permission)) {
-				$session = null;
+			if (!in_array('email', $grantedPermission) ||
+				!in_array('user_about_me', $grantedPermission) ||
+				!in_array('user_birthday', $grantedPermission)) {
+				$accessToken = null;
 				$messages[] = 'There seems to be a missing permission from Facebook. Please try logging in again.';
 			}
-		} catch(FacebookRequestException $e) {
-			$session = null;
+		} catch (Facebook\Exceptions\FacebookSDKException $e) {
+			$accessToken = null;
 			$messages[] = 'There was an error accessing your Facebook account. Please try again';
-			//echo "Exception occured, code: " . $e->getCode() . " with message: " . $e->getMessage();
-		} 
+		}
 	}
 	
-	if ($session) {
+	if (isset($accessToken)) {
 		if ($logged_in === true) {
 			// Were already logged in and validated, no need to query database
 			$fb_logged_in = true;
 		} else {
-			$email = $user_profile->getEmail();
-			$fb_first_name = $user_profile->getFirstName();
-			$fb_last_name = $user_profile->getLastName();
-			$fb_birthdate = $user_profile->getBirthday();
+			$userProfile = $fb->get('/me?fields=birthday,email,first_name,last_name')->getGraphUser();
+			
+			$email = $userProfile->getEmail();
+			$fb_first_name = $userProfile->getFirstName();
+			$fb_last_name = $userProfile->getLastName();
+			$fb_birthdate = $userProfile->getBirthday();
 		
 			// Lookup user
 			$stmt = $mysqli->prepare("SELECT id, password, first_name, last_name, birthday FROM `".MYSQL_PREFIX."users` WHERE email = ? LIMIT 0,1");
@@ -277,7 +274,7 @@ if (FBLOGIN_ENABLED == true && defined('FBLOGIN_APPID') && defined('FBLOGIN_APPS
 		}
 	} 
 
-	$fb_login_url = $helper->getLoginUrl(array('email,user_about_me,user_birthday'));
+	$fb_login_url = $helper->getLoginUrl($redirectUri, ['email,user_about_me,user_birthday']);
 }
 
 if ($logged_in == false) {
