@@ -24,6 +24,7 @@
 		"ext-mbstring": "*",
 		"phpmailer/phpmailer": "*",
 		"facebook/php-sdk-v4": "*",
-		"aferrandini/phpqrcode": ">=1.0.1"
+		"aferrandini/phpqrcode": ">=1.0.1",
+        "ircmaxell/password-compat": "^1.0"
 	}
 }
