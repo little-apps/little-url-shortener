@@ -238,8 +238,7 @@ if (FBLOGIN_ENABLED == true && defined('FBLOGIN_APPID') && defined('FBLOGIN_APPS
 				$birthdate_formatted = sprintf("%04d-%02d-%02d", $fb_birthdate->format('Y'), $fb_birthdate->format('m'), $fb_birthdate->format('d'));
 			
 				// Hash password
-				require_once(dirname(__FILE__).'/passhash.class.php');
-				$pass_hash = PassHash::hash(uniqid());
+				$pass_hash = password_hash(uniqid());
 				
 				// Generate API Key
 				$api_key = md5(uniqid('api_'));

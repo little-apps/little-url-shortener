@@ -99,11 +99,6 @@
 		$messages[] = 'The file "config.php" in the "inc" directory must be writable.';
 	}
 	
-	// Make sure PassHash class exists
-	if (!file_exists('inc/passhash.class.php')) {
-		$messages[] = 'PassHash class file (inc/passhash.class.php) not found.';
-	}
-	
 	if (count($messages) == 0 && ($_SERVER['REQUEST_METHOD'] && $_SERVER['REQUEST_METHOD'] == 'POST')) {
 		// If magic quotes enabled => remove slashes
 		if (get_magic_quotes_gpc()) {
@@ -462,8 +457,7 @@ SQL;
 						}
 					
 						// Hash admin password
-						require_once('inc/passhash.class.php');
-						$admin_pass_hash = PassHash::hash($admin_options['password']);
+						$admin_pass_hash = password_hash($admin_options['password']);
 						
 						// Add admin to database
 						if ($stmt = mysqli_prepare($mysqli, 'INSERT INTO '.$mysql_options_strings['mysql-table-prefix'].'admins (`username`,`password`) VALUES(?,?)')) {

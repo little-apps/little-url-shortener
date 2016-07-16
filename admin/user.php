@@ -21,7 +21,6 @@
 	define('LUS_ADMINAREA', true);
 	
 	require_once('../inc/main.php');
-	require_once('../inc/passhash.class.php');
 	
 	if ($admin_logged_in == false) {
 		redirect('login.php');
@@ -183,7 +182,7 @@
 					
 						if ($new_password != '') {
 							// Generate new password
-							$new_pass_hash = PassHash::hash($new_password);
+							$new_pass_hash = password_hash($new_password);
 						}
 						
 						if ($stmt = $mysqli->prepare("UPDATE `".MYSQL_PREFIX."users` SET first_name=?,last_name=?,email=?,password=? WHERE id=?")) {

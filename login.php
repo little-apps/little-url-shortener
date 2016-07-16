@@ -20,7 +20,6 @@
 	define('LUS_LOADED', true);
 
 	require_once('inc/main.php');
-	require_once('inc/passhash.class.php');
 	
 	if ($logged_in == true && $_GET['action'] != 'logout') {
 		redirect('account.php');
@@ -152,7 +151,7 @@
 				$birthdate = sprintf("%04d-%02d-%02d", $birth_year, date('m', strtotime($birth_month)), $birth_day);
 			
 				// Hash password
-				$pass_hash = PassHash::hash($password);
+				$pass_hash = password_hash($password);
 				
 				// Generate API Key
 				$api_key = md5(uniqid('api_'));
@@ -212,7 +211,7 @@
 				} else {
 					$stmt->close();
 
-					if (PassHash::check_password($pass_hash, $password)) {
+					if (password_verify($password, $pass_hash)) {
 						// If password reset key is set, unset it
 						if ($reset_password_key != '') {
 							$stmt = $mysqli->prepare("UPDATE `".MYSQL_PREFIX."users` SET reset_password_key = '' WHERE id=?");

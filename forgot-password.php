@@ -20,7 +20,6 @@
 	define('LUS_LOADED', true);
 
 	require_once('inc/main.php');
-	require_once('inc/passhash.class.php');
 	
 	if ($logged_in == true) {
 		// No need for forgot password, redirect to account
@@ -102,7 +101,7 @@
 					$show_reset_form = true;
 				} else {
 					// Generate password hash
-					$new_pass_hash = PassHash::hash($new_password);
+					$new_pass_hash = password_hash($new_password);
 					
 					// Update password + clear reset key
 					$stmt = $mysqli->prepare("UPDATE `".MYSQL_PREFIX."users` SET password=?, reset_password_key='' WHERE id=?");

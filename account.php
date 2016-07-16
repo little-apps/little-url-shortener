@@ -20,7 +20,6 @@
 	define('LUS_LOADED', true);
 
 	require_once('inc/main.php');
-	require_once('inc/passhash.class.php');
 	
 	if ((isset($_GET['action']) && isset($_GET['key'])) && $_GET['action'] == 'updateEmail') {
 		// Store key in session (in case user needs to login)
@@ -119,7 +118,7 @@
 		if ($_POST['action'] == 'update') {
 			$current_pass = ( (isset($_POST['currentpass'])) ? trim($_POST['currentpass']) : '' );
 			
-			if (PassHash::check_password($pass_hash, $current_pass)) {
+			if (password_verify($current_pass, $pass_hash)) {
 				$new_first_name = ( (isset($_POST['first'])) ? trim($_POST['first']) : '' );
 				$new_last_name = ( (isset($_POST['last'])) ? trim($_POST['last']) : '' );
 				$new_email = ( (isset($_POST['email'])) ? trim(strtolower($_POST['email'])) : '' );
@@ -204,7 +203,7 @@
 					
 						if ($new_password != '') {
 							// Generate new password
-							$new_pass_hash = PassHash::hash($new_password);
+							$new_pass_hash = password_hash($new_password);
 						}
 						
 						$stmt = $mysqli->prepare("UPDATE `".MYSQL_PREFIX."users` SET first_name=?,last_name=?,password=? WHERE id=?");

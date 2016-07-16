@@ -21,7 +21,6 @@
 	define('LUS_ADMINAREA', true);
 
 	require_once('../inc/main.php');
-	require_once('../inc/passhash.class.php');
 	
 	if ($admin_logged_in && $_GET['action'] != 'logout') {
 		redirect('index.php');
@@ -70,7 +69,7 @@
 			} else {
 				$stmt->close();
 
-				if (PassHash::check_password($pass_hash, $password)) {
+				if (password_verify($password, $pass_hash)) {
 					// Regenerate session ID to prevent session hijacking
 					session_regenerate_id();
 					
