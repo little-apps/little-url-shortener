@@ -33,8 +33,6 @@ function send_email($to_email, $to_name, $from_email, $from_name, $subject, $mes
 	global $php_mailer;
         
 	if ( !isset( $php_mailer ) ) {
-		require_once( dirname(__FILE__).'/phpmailer/PHPMailerAutoload.php' );
-
 		$php_mailer = new PHPMailer();
 	}
 	

@@ -22,10 +22,12 @@ if (!defined('LUS_LOADED')) die('This file cannot be loaded directly');
 // Uncomment this to enable debugging (not recommended)
 //error_reporting(0);
 
+// Load composer includes
+require_once(dirname(__FILE__).'/../vendor/autoload.php');
+
 require_once(dirname(__FILE__).'/config.php');
 require_once(dirname(__FILE__).'/functions.php');
 require_once(dirname(__FILE__).'/shorturl.class.php');
-require_once(dirname(__FILE__).'/facebook-api/autoload.php');
 
 use Facebook\FacebookSession;
 use Facebook\FacebookRedirectLoginHelper;

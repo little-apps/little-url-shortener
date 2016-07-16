@@ -28,9 +28,8 @@ if (!isset($_GET['token'])) {
 	die('No short URL found');
 }
 
-require_once(dirname(__FILE__).'/phpqrcode/lib/PHPQRCode.php');
-
-\PHPQRCode\Autoloader::register();
+// Load composer includes
+require_once('../vendor/autoload.php');
 
 // Prevent caching
 header( "Expires: Mon, 26 Jul 1997 05:00:00 GMT" );
