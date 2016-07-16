@@ -1,3 +1,5 @@
 inc/config.php
 Little URL Shortener.clpprj
 *.db
+composer.lock
+/vendor
