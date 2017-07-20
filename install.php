@@ -419,10 +419,10 @@ define('MYSQL_DB', '{$mysql_options_strings['mysql-database']}');
 define('MYSQL_PREFIX', '{$mysql_options_strings['mysql-table-prefix']}');
 
 // API Configuration
-define('API_ENABLE', '{$api_options_strings['enable']}');
-define('API_READ', '{$api_options_strings['read']}'); // Allow short URLs to be translated to long URL using API
-define('API_WRITE', '{$api_options_strings['write']}'); // Allow short URLS to be created using API
-define('API_AUTHORIZED', '{$api_options_strings['authorized']}'); // Requires a valid API key in order to perform API requests
+define('API_ENABLE', {$api_options_strings['enable']});
+define('API_READ', {$api_options_strings['read']}); // Allow short URLs to be translated to long URL using API
+define('API_WRITE', {$api_options_strings['write']}); // Allow short URLS to be created using API
+define('API_AUTHORIZED', {$api_options_strings['authorized']}); // Requires a valid API key in order to perform API requests
 PHP;
 
 				if (file_put_contents('inc/config.php', $config_text) === false) {
