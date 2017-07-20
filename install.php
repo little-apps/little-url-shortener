@@ -457,7 +457,7 @@ SQL;
 						}
 					
 						// Hash admin password
-						$admin_pass_hash = password_hash($admin_options['password']);
+						$admin_pass_hash = password_hash($admin_options['password'], PASSWORD_DEFAULT);
 						
 						// Add admin to database
 						if ($stmt = mysqli_prepare($mysqli, 'INSERT INTO '.$mysql_options_strings['mysql-table-prefix'].'admins (`username`,`password`) VALUES(?,?)')) {
