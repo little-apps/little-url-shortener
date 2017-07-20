@@ -72,32 +72,32 @@ if (!isset($_GET['url'])) {
 
 // No need to use urldecode() since it's already taken care of
 $url = $_GET['url'];
+$api_key = ( isset($_GET['api_key']) ? trim(strtolower($_GET['api_key'])) : '' );
+
+$user_id = 0;
+
+if ($api_key != '') {
+	// Lookup user using API key
+	$stmt = $mysqli->prepare("SELECT id FROM `".MYSQL_PREFIX."users` WHERE api_key = ? LIMIT 0,1");
+	$stmt->bind_param('s', $api_key);
+	$stmt->execute();
+	
+	$stmt->bind_result($user_id);
+
+	if ($stmt->fetch() !== true) {
+		$user_id = 0;
+	}
+
+	$stmt->close();
+}
+
+if ($user_id == 0 && defined('API_AUTHORIZED') && API_AUTHORIZED)
+	die(json_encode(array('status' => 'error', 'message' => 'A valid API key is required.')));
 
 if ($_GET['request'] == 'create') {
-	$api_key = ( isset($_GET['api_key']) ? trim(strtolower($_GET['api_key'])) : '' );
-
-	$user_id = 0;
-
-	if ($logged_in == true) {
-		$user_id = $_SESSION['user_id'];
-	} else if ($api_key != '') {
-		// Lookup user using API key
-		$stmt = $mysqli->prepare("SELECT id FROM `".MYSQL_PREFIX."users` WHERE api_key = ? LIMIT 0,1");
-		$stmt->bind_param('s', $api_key);
-		$stmt->execute();
-		
-		$stmt->bind_result($user_id);
-
-		if ($stmt->fetch() !== true) {
-			$user_id = 0;
-		}
-
-		$stmt->close();
-	}
-	
 	if ($user_id > 0)
 		$shorturl->set_user_id($user_id);
-
+	
 	if ($shorturl->create($url)) {
 		$short_url = $shorturl->get_short_url();
 		$data = array('status' => 'success', 'shorturl' => $short_url, 'longurl' => $url);

@@ -273,7 +273,7 @@
 // URL to shorten
 $url = "http://www.google.com";
 
-// API Key
+// API Key <?php if (defined('API_AUTHORIZED') && API_AUTHORIZED) : ?>(A valid key is needed for this API)<?php endif; ?>
 $api_key = "<?php echo $api_key ?>";
 
 // Initalize cURL
@@ -360,8 +360,12 @@ echo "The short URL for ".$url." is ".$shorturl;
 // Can also be "abcdefg"
 $url = "<?php echo SITE_URL ?>/abcdefg";
 
+// API Key <?php if (defined('API_AUTHORIZED') && API_AUTHORIZED) : ?>(A valid key is needed for this API)<?php endif; ?>
+
+$api_key = "<?php echo $api_key ?>";
+
 // Initalize cURL
-$ch = curl_init("<?php echo SITE_URL ?>/api.php?request=get&url=".urlencode($url));
+$ch = curl_init("<?php echo SITE_URL ?>/api.php?request=get&url=".urlencode($url)."&key=".$api_key);
 
 // Don't get header
 curl_setopt($ch, CURLOPT_HEADER, false);
