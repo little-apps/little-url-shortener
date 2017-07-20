@@ -60,6 +60,12 @@
 			'mysql-database' => ( defined('MYSQL_DB') ? MYSQL_DB : 'database' ),
 			'mysql-table-prefix' => ( defined('MYSQL_PREFIX') ? MYSQL_PREFIX : 'lus_' ),
 		),
+		'api' => array(
+			'enable' => ( defined('API_ENABLE') ? API_ENABLE : true ),
+			'read' => ( defined('API_READ') ? API_READ : true ),
+			'write' => ( defined('API_WRITE') ? API_WRITE : true ),
+			'authorized' => ( defined('API_AUTHORIZED') ? API_AUTHORIZED : false ),
+		)
 	);
 	
 	$messages = array();
@@ -328,12 +334,17 @@
 				$messages[] = "MySQL table prefix cannot have spaces.";
 			}
 			
-			
 			// Attempt connection to MySQL
 			$mysqli = @mysqli_connect($mysql_options['mysql-host'], $mysql_options['mysql-user'], $mysql_options['mysql-pass'], $mysql_options['mysql-database']);
 			
 			if (!$mysqli) {
 				$messages[] = 'MySQL connect error (' . mysqli_connect_errno() . ') ' . mysqli_connect_error();
+			}
+			
+			$api_options = $_POST['api'];
+			
+			foreach (array('enable', 'read', 'write', 'authorized') as $key) {
+				$api_options[$key] = (isset($api_options[$key]) ? true : false);
 			}
 			
 			if (count($messages) == 0) {
@@ -356,12 +367,14 @@
 				$facebook_options_strings = $facebook_options;
 				$mail_options_strings = $mail_options;
 				$mysql_options_strings = $mysql_options;
+				$api_options_strings = $api_options;
 				
 				array_walk($site_options_strings, 'prepare_value');
 				array_walk($admin_options_strings, 'prepare_value');
 				array_walk($facebook_options_strings, 'prepare_value');
 				array_walk($mail_options_strings, 'prepare_value');
 				array_walk($mysql_options_strings, 'prepare_value');
+				array_walk($api_options_strings, 'prepare_value');
 
 				// We are go for installation!
 				
@@ -404,6 +417,12 @@ define('MYSQL_USER', '{$mysql_options_strings['mysql-user']}');
 define('MYSQL_PASS', '{$mysql_options_strings['mysql-pass']}');
 define('MYSQL_DB', '{$mysql_options_strings['mysql-database']}');
 define('MYSQL_PREFIX', '{$mysql_options_strings['mysql-table-prefix']}');
+
+// API Configuration
+define('API_ENABLE', '{$api_options_strings['enable']}');
+define('API_READ', '{$api_options_strings['read']}'); // Allow short URLs to be translated to long URL using API
+define('API_WRITE', '{$api_options_strings['write']}'); // Allow short URLS to be created using API
+define('API_AUTHORIZED', '{$api_options_strings['authorized']}'); // Requires a valid API key in order to perform API requests
 PHP;
 
 				if (file_put_contents('inc/config.php', $config_text) === false) {
@@ -731,6 +750,15 @@ SQL;
 						<li><label for="mysql-pass">MySQL Password: </label><input type="text" name="mysql[mysql-pass]" id="mysql-pass" value="<?php echo $default_values['mysql']['mysql-pass'] ?>" /></li>
 						<li><label for="mysql-database">MySQL Database: </label><input type="text" name="mysql[mysql-database]" id="mysql-database" value="<?php echo $default_values['mysql']['mysql-database'] ?>" /></li>
 						<li><label for="mysql-table-prefix">Table Prefix: </label><input type="text" name="mysql[mysql-table-prefix]" id="mysql-table-prefix" value="<?php echo $default_values['mysql']['mysql-table-prefix'] ?>" /></li>
+					</ul>
+				</div>
+				<div class="api">
+					<p>API Configuration</p>
+					<ul>
+						<li><label for="api-enable">Enable API</label><input type="checkbox" name="api[enable]" id="api-enable" <?php echo ( $default_values['api']['enable'] == true ? 'checked' : '' ) ?> /></li>
+						<li><label for="api-read">Allow API Reading (Retrieving Long URLs)</label><input type="checkbox" name="api[read]" id="api-read" <?php echo ( $default_values['api']['read'] == true ? 'checked' : '' ) ?> /></li>
+						<li><label for="api-write">Allow Writing (Generating Short URLs)</label><input type="checkbox" name="api[write]" id="api-write" <?php echo ( $default_values['api']['write'] == true ? 'checked' : '' ) ?> /></li>
+						<li><label for="api-authorized">Require Valid API Key</label><input type="checkbox" name="api[authorized]" id="api-authorized" <?php echo ( $default_values['api']['authorized'] == true ? 'checked' : '' ) ?> /></li>
 					</ul>
 				</div>
 				<div class="install">
