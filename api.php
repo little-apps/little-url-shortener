@@ -57,6 +57,14 @@ if ($_GET['request'] != 'create' && $_GET['request'] != 'get') {
 	die(json_encode(array('status' => 'error', 'message' => 'Invalid API request (must be create or get)')));
 }
 
+if ($_GET['request'] == 'create' && (!defined('API_WRITE') || !API_WRITE)) {
+	die(json_encode(array('status' => 'error', 'message' => 'Generating short URLs is disabled.')));
+}
+
+if ($_GET['request'] == 'get' && (!defined('API_READ') || !API_READ)) {
+	die(json_encode(array('status' => 'error', 'message' => 'Converting short URLs to long URLs is disabled.')));
+}
+
 // Check URL
 if (!isset($_GET['url'])) {
 	die(json_encode(array('status' => 'error', 'message' => 'No URL sent')));

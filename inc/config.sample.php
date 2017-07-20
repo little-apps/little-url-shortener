@@ -42,3 +42,5 @@ define('MYSQL_PREFIX', 'lus_');
 
 // API Configuration
 define('API_ENABLE', true);
+define('API_READ', true); // Allow short URLs to be translated to long URL using API
+define('API_WRITE', true); // Allow short URLS to be created using API

@@ -238,6 +238,7 @@
 						<li><a href="#down">Get URL</a></li>
 					</ul>
 					<div id="up">
+						<?php if (defined('API_WRITE') && API_WRITE) : ?>
 						<p>Shortened URLs can be created by sending a GET request to the API which is located at <?php echo SITE_URL ?>/api.php. The parameters for the get request are below:</p>
 						<table>
 							<thead>
@@ -323,8 +324,12 @@ echo "The short URL for ".$url." is ".$shorturl;
 	"message": "URL is not valid",
 }
 </code></pre>
+						<?php else : ?>
+						<p>Creating shortened URLs with the API has been disabled.</p>
+						<?php endif; ?>
 					</div>
 					<div id="down">
+						<?php if (defined('API_READ') && API_READ) : ?>
 						<p>Short URLs can be turned into long URLs by sending a GET request to the API which is located at <?php echo SITE_URL ?>/api.php. The parameters for the get request are below:</p>
 						<table>
 							<thead>
@@ -403,6 +408,9 @@ echo "The long URL for ".$url." is ".$longurl;
 	"message": "URL does not exist",
 }
 </code></pre>
+						<?php else : ?>
+						<p>Getting the long URL from a shortened URL has been disabled.</p>
+						<?php endif; ?>
 					</div>
 				</div>
 			<?php else : ?>
