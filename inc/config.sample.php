@@ -39,3 +39,6 @@ define('MYSQL_USER', 'user');
 define('MYSQL_PASS', 'pass123');
 define('MYSQL_DB', 'database');
 define('MYSQL_PREFIX', 'lus_');
+
+// API Configuration
+define('API_ENABLE', true);

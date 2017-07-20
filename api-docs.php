@@ -230,6 +230,7 @@
 			</div>
 			<div id="bottom" style="padding-bottom: 20px; width: 959px; margin: 0px auto;">
 				<p id="title">API Documentation</p>
+<?php if (defined('API_ENABLE') && API_ENABLE) : ?>				
 				<p id="text">Developers can create shortened URLs simply and easily with the <?php echo SITE_NAME ?> API. The API accepts data using the GET method and the result is returned using JSON.</p>
 				<div id="tabs">
 					<ul>
@@ -404,6 +405,9 @@ echo "The long URL for ".$url." is ".$longurl;
 </code></pre>
 					</div>
 				</div>
+			<?php else : ?>
+			<p id="text">The API is currently disabled.</p>
+			<?php endif; ?>
 			</div>			
 		</div>
 		<div id="footer">

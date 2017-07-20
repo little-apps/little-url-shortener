@@ -34,6 +34,9 @@ if (mysqli_connect_error()) {
 
 header('Content-Type: text/json');
 
+if (!defined('API_ENABLE') || !API_ENABLE)
+	die(json_encode(array('status' => 'error', 'message' => 'The API is currently disabled.')));
+
 $shorturl = new ShortURL();
 
 if (!empty($shorturl->error_msg))
