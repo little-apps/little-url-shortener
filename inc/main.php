@@ -20,7 +20,7 @@
 if (!defined('LUS_LOADED')) die('This file cannot be loaded directly');
 
 // Uncomment this to enable debugging (not recommended)
-//error_reporting(0);
+//error_reporting(E_ALL);
 
 // Load composer includes
 require_once(dirname(__FILE__).'/../vendor/autoload.php');

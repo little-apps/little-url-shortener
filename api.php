@@ -23,7 +23,7 @@ require_once('inc/config.php');
 require_once('inc/shorturl.class.php');
 
 // Uncomment this to enable debugging (not recommended)
-//error_reporting(0);
+//error_reporting(E_ALL);
 
 // Connect to MySQL
 $mysqli = new mysqli(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
