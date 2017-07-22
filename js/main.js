@@ -163,33 +163,44 @@ jQuery(document).ready(function($) {
 	});
 	
 	/* Popup */
-	if ($(".popup > .inner > .content").length > 0) {
-		$(".popup").slideDown();
-		
-		$(".popup > .inner > .content > a > #link").click(function() {
-			$(this).select();
-		});
-		
-		$(".popup > .inner > .content > a#short-url").zclip({ path:'js/ZeroClipboard.swf',copy:function(){return $(".popup > .inner > .content > a > #link").val();}});
-		
-		$(".popup > .inner > .content > #closeModal").click(function() {
-			$(".popup").slideUp();
-		});
-	}
+	var showPopup = function() {
+		if ($(".popup > .inner > .content").length > 0) {
+			$(".popup").slideDown();
+			
+			$(".popup > .inner > .content > a > #link").click(function() {
+				$(this).select();
+			});
+			
+			$(".popup > .inner > .content > a#short-url").zclip({ path:'js/ZeroClipboard.swf',copy:function(){return $(".popup > .inner > .content > a > #link").val();}});
+			
+			$(".popup > .inner > .content > #closeModal").click(function() {
+				$(".popup").slideUp();
+			});
+		}
+	};
 	
-	if ($("#message-wrapper").length > 0) {
-		$("#message-wrapper").slideDown();
+	var showMessage = function() {
+		if ($("#message-wrapper").length > 0) {
+			$("#message-wrapper").slideDown();
+		
+			$("#message-wrapper > #message > ul > li#closeModal > a").click(function() {
+				$("#message").slideUp();
+			});
+		}
+	};
 	
-		$("#message-wrapper > #message > ul > li#closeModal > a").click(function() {
-			$("#message").slideUp();
-		});
-	}
+	// Add AJAX token to requests
+	$.ajaxSetup({
+		data: {
+			token: ajaxToken
+		}
+	});
 	
 	// Update statistics
 	if ($(".stats").length > 0) {
 		function refreshStats() {
 			if (!$("body").hasClass("hidden")) {
-				$.getJSON('inc/stats.php', function(data) {
+				$.getJSON('ajax.php?action=stats', function(data) {
 					$.each(data, function(index, value) {
 						if (index == 'urls') {
 							$(".stats > .boxes > .box > .number#urls-count").html(value);
@@ -206,6 +217,40 @@ jQuery(document).ready(function($) {
 		refreshStats();
 		window.setInterval(refreshStats, 10000);
 	}
+	
+	$('.generateform').submit(function(e) {
+		e.preventDefault();
+		
+		$.ajax({
+			url: 'ajax.php',
+			method: 'post',
+			data: {
+				action: 'generate',
+				url: $('#url', this).val()
+			}
+		}).done(function(response) {
+			if (response.status != 'error') {
+				var popupTemplate = $('script#template-shorturl').html();
+				
+				popupTemplate = 
+					popupTemplate
+						.replace(/{{shorturl}}/g, response.short_url)
+						.replace(/{{qrcode}}/g, response.qrcode);
+				
+				$('body').append(popupTemplate);
+				
+				showPopup();
+			} else {
+				var errorTemplate = $('script#template-error').html();
+				
+				errorTemplate = errorTemplate.replace(/{{error}}/g, response.message);
+				
+				$('body').append(errorTemplate);
+				
+				showMessage();
+			}
+		});
+	});
 });
 
 /* Select text */

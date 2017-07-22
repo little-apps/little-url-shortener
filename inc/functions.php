@@ -67,29 +67,37 @@ function send_email($to_email, $to_name, $from_email, $from_name, $subject, $mes
 	$php_mailer->send();
 }
 
-/**
-* Outputs Short URL box
-*/
-function output_short_url() {
-	if (isset($_SESSION['short_url'])) { 
+function output_templates() {
 ?>
+	<script type="text/html" id="template-shorturl">
 		<div class="popup" style="display: none">
 			<div class="overlay">&nbsp;</div>
 			<div class="inner">
 				<div class="content">
 					<a href="#" id="closeModal"><img src="images/modal_close.png"/></a>
 					<p>Generated URL</p>
-					<a href="#" id="short-url"><input id="link" value="<?php echo $_SESSION['short_url'] ?>" readonly /></a>
-					<img src="inc/qrcode.php?token=<?php echo $_SESSION['image_token'] ?>" width="256" height="256" alt="QR Code" id="qrcode" />
+					<a href="#" id="short-url"><input id="link" value="{{shorturl}}" readonly /></a>
+					<img src="{{qrcode}}" width="256" height="256" alt="QR Code" id="qrcode" />
 					<div id="share">
-						<button id="facebook" onclick="javascript: window.open('http://www.facebook.com/sharer.php?u=<?php echo urlencode($_SESSION['short_url']) ?>', '_blank');">Share</button>
-						<button id="twitter" onclick="javascript: window.open('http://twitter.com/share?url=<?php echo urlencode($_SESSION['short_url']) ?>', '_blank');">Tweet</button>
+						<button id="facebook" onclick="javascript: window.open('http://www.facebook.com/sharer.php?u={{shorturl}}', '_blank');">Share</button>
+						<button id="twitter" onclick="javascript: window.open('http://twitter.com/share?url={{shorturl}}', '_blank');">Tweet</button>
 					</div>
 				</div>
 			</div>
 		</div>
+	</script>
+	<script type="text/html" id="template-error">
+		<div id="message-wrapper">
+			<div id="message">
+				<ul>
+					<li id="closeModal"><a href="#"><img src="images/modal_close.png"/></a></li>
+					<li id="title">Attention! Please correct the errors below and try again.</li>
+					<li>{{error}}</li>
+				</ul>
+			</div>
+		</div>
+	</script>
 <?php
-	}
 }
 
 /**

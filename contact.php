@@ -105,7 +105,6 @@
 	<body>
 		<?php ganalytics_tracking(); ?>
 		<?php output_errors(); ?>
-		<?php output_short_url(); ?>
 		<div id="topmenu">
 			<div id="nav">
 				<div id="box">
@@ -270,6 +269,12 @@
 			<div id="copyright"><a href="https://github.com/little-apps/little-url-shortener" target="_blank">Little URL Shortener</a> was developed by <a href="http://www.little-apps.com" target="_blank">Little Apps</a> and is licensed under the <a href="http://www.gnu.org/licenses/gpl.html" target="_blank">GNU GPLv3</a>.</div>
 			<div id="navigation"><a href="index.php">Home</a> | <a href="account.php">Account</a> | <a href="api-docs.php">API Documentation</a> | <a href="contact.php">Contact</a></div>
 		</div>
+		
+		<script type="text/javascript">
+			var ajaxToken = <?php echo json_encode($_SESSION['ajax_token']); ?>;
+		</script>
+		
+		<?php output_templates(); ?>
 	</body>
 	
 </html>

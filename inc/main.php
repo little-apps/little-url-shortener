@@ -79,6 +79,12 @@ if ((isset($_POST['token']) && isset($_SESSION['csrf_token'])) && $_POST['token'
 $csrf_token = md5(uniqid());
 $_SESSION['csrf_token'] = $csrf_token;
 
+// Generate AJAX Token
+if (!isset($_SESSION['ajax_token']) || (isset($_SESSION['ajax_expires']) && time() > $_SESSION['ajax_expires'])) {
+	$_SESSION['ajax_token'] = md5(uniqid());
+	$_SESSION['ajax_expires'] = strtotime('+48 hours');
+}
+
 // Initialize shorturl class
 $shorturl = new ShortURL();
 
