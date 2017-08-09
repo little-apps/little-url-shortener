@@ -221,12 +221,14 @@ jQuery(document).ready(function($) {
 	$('.generateform').submit(function(e) {
 		e.preventDefault();
 		
+		var _that = this;
+		
 		$.ajax({
 			url: 'ajax.php',
 			method: 'post',
 			data: {
 				action: 'generate',
-				url: $('#url', this).val()
+				url: $('#url', _that).val()
 			}
 		}).done(function(response) {
 			if (response.status != 'error') {
@@ -242,7 +244,7 @@ jQuery(document).ready(function($) {
 				showPopup();
 				
 				// Clear URL
-				$('#url', this).val('');
+				$('#url', _that).val('');
 			} else {
 				var errorTemplate = $('script#template-error').html();
 				
