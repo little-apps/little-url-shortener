@@ -240,6 +240,9 @@ jQuery(document).ready(function($) {
 				$('body').append(popupTemplate);
 				
 				showPopup();
+				
+				// Clear URL
+				$('#url', this).val('');
 			} else {
 				var errorTemplate = $('script#template-error').html();
 				
