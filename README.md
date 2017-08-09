@@ -11,11 +11,11 @@ The following is required to run Little URL Shortener properly:
 * [PHP v5.4](http://php.net/) or higher
 * [MySQL](http://www.mysql.com/) or [MariaDB](https://www.mariadb.org) v5.5 or higher
 * PHP extensions:
- * [MySQL Improved](http://php.net/manual/en/book.mysqli.php)
- * [GD (Image Processing)](http://php.net/manual/en/book.image.php)
- * [Session](http://php.net/manual/en/book.session.php)
- * [JSON](http://php.net/manual/en/book.json.php)
- * [Multibyte String](http://php.net/manual/en/book.mbstring.php)
+  * [MySQL Improved](http://php.net/manual/en/book.mysqli.php)
+  * [GD (Image Processing)](http://php.net/manual/en/book.image.php)
+  * [Session](http://php.net/manual/en/book.session.php)
+  * [JSON](http://php.net/manual/en/book.json.php)
+  * [Multibyte String](http://php.net/manual/en/book.mbstring.php)
 
 ### Installation ###
 To install Little URL Shortener, simply navigate to the "install.php" file in your web browser. For example, http://www.mywebsite.com/install.php.
@@ -29,9 +29,9 @@ If you would like to see Little URL Shortener in action, please check out [7LS.N
 
 ### Release Notes ###
 * 1.1
- * Added Facebook support
+  * Added Facebook support
 * 1.0
- * First public release
+  * First public release
  
 ### To Do ###
  * Add update script to update versions
