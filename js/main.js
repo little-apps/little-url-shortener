@@ -180,14 +180,15 @@ jQuery(document).ready(function($) {
 	};
 	
 	var showMessage = function() {
-		if ($("#message-wrapper").length > 0) {
-			$("#message-wrapper").slideDown();
+		$("#message-wrapper").slideDown();
 		
-			$("#message-wrapper > #message > ul > li#closeModal > a").click(function() {
-				$("#message").slideUp();
-			});
-		}
+		$("#message-wrapper > #message > ul > li#closeModal > a").click(function() {
+			$("#message").slideUp();
+		});
 	};
+	
+	if ($("#message-wrapper").length > 0)
+		showMessage();
 	
 	// Add AJAX token to requests
 	$.ajaxSetup({
