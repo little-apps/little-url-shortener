@@ -315,7 +315,7 @@ echo "The short URL for ".$url." is ".$shorturl;
 	"longurl": "http://www.google.com"
 }
 </code></pre>
-						<p>If an error occurred, then the JSON string would something like:</p>
+						<p>If an error occurred, then the JSON string would be something like:</p>
 <pre><code class="json">
 {
 	"status": "error",
@@ -402,7 +402,7 @@ echo "The long URL for ".$url." is ".$longurl;
 	"longurl": "http://www.google.com"
 }
 </code></pre>
-						<p>If an error occurred, then the JSON string would something like:</p>
+						<p>If an error occurred, then the JSON string would be something like:</p>
 <pre><code class="json">
 {
 	"status": "error",
