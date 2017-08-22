@@ -348,6 +348,11 @@ echo "The short URL for ".$url." is ".$shorturl;
 									<td>Short URL</td>
 									<td>Can be full URL or just path</td>
 								</tr>
+								<tr>
+									<td>key</td>
+									<td>API Key</td>
+									<td><?php echo (defined('API_AUTHORIZED') && API_AUTHORIZED ? 'Required' : 'Optional'); ?></td>
+								</tr>
 							</tbody>
 						</table>
 						<p>This example shows how to get a long URL from a short URL using a HTTP request using PHP and cURL:</p>
