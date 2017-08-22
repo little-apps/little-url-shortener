@@ -260,7 +260,7 @@
 								<tr>
 									<td>key</td>
 									<td>API Key</td>
-									<td>Optional</td>
+									<td><?php echo (defined('API_AUTHORIZED') && API_AUTHORIZED ? 'Required' : 'Optional'); ?></td>
 								</tr>
 							</tbody>
 						</table>
